@@ -144,49 +144,6 @@ export default function AttendancePage() {
         </div>
       )}
 
-      <p className="mb-4 text-sm text-[var(--chalk-muted)]">
-        전화번호 뒤 4자리를 입력해 주세요.
-      </p>
-
-      {/* QR코드 입력 */}
-      <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-        <div>
-          <label htmlFor="qr-input" className="mb-1 block text-sm text-[var(--chalk-muted)]">
-            QR코드 입력
-          </label>
-          <div className="flex gap-2">
-            <input
-              id="qr-input"
-              type="text"
-              inputMode="numeric"
-              maxLength={4}
-              placeholder="QR 스캔 후 4자리 입력"
-              className="input-base flex-1"
-              value={digits}
-              onChange={(e) => {
-                const v = e.target.value.replace(/\D/g, "").slice(0, 4);
-                setDigits(v);
-                setMessage(null);
-                setSelectModal(null);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && digits.length === 4) {
-                  e.preventDefault();
-                  doCheck();
-                }
-              }}
-            />
-            <button
-              type="button"
-              onClick={() => digits.length === 4 && doCheck()}
-              disabled={digits.length !== 4 || loading}
-              className="rounded-xl bg-[var(--primary)] px-4 py-2.5 text-sm font-medium text-white transition hover:bg-[var(--primary-hover)] disabled:opacity-50 disabled:pointer-events-none"
-            >
-              확인
-            </button>
-          </div>
-        </div>
-      </div>
       <div className="card mb-6 rounded-2xl p-5 text-center text-2xl tracking-[0.5em] text-[var(--chalk)]">
         {digits.padEnd(4, "·")}
       </div>
