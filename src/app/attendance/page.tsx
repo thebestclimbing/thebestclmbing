@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
@@ -16,6 +16,13 @@ export default function AttendancePage() {
   const [message, setMessage] = useState<{ type: "ok" | "error"; text: string } | null>(null);
   const [loading, setLoading] = useState(false);
   const [selectModal, setSelectModal] = useState<ProfileRow[] | null>(null);
+  const defaultBase = process.env.NEXT_PUBLIC_APP_URL || "https://thebestclmbing.vercel.app";
+  const [registerUrl, setRegisterUrl] = useState(`${defaultBase}/member/register`);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setRegisterUrl(`${window.location.origin}/member/register`);
+    }
+  }, []);
 
   function handleKey(key: string) {
     if (key === "지우기") {
@@ -62,7 +69,6 @@ export default function AttendancePage() {
     const expiryText = membershipEnd ? ` 회원권 만료: ${membershipEnd} (${dday})` : "";
     setMessage({ type: "ok", text: `${profileName}님 출석 완료되었습니다.${expiryText}` });
     setDigits("");
-    router.refresh();
   }
 
   async function doCheck() {
@@ -99,26 +105,52 @@ export default function AttendancePage() {
     return `D+${-diff}`;
   }
 
+  function closeResultModal() {
+    setMessage(null);
+    router.refresh();
+  }
+
   return (
     <div className="mx-auto max-w-sm px-4 py-8">
       <h1 className="mb-6 text-2xl font-bold text-[var(--chalk)]">
         출석체크
       </h1>
-      <p className="mb-4 text-sm text-[var(--chalk-muted)]">
-        전화번호 뒤 4자리를 입력해 주세요.
-      </p>
 
-      {/* 회원가입 이동 + QR코드 입력 */}
-      <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-        <div className="flex items-center justify-between gap-2">
-          <span className="text-sm text-[var(--chalk-muted)]">회원이 아니신가요?</span>
+      {/* 회원가입 링크 QR코드 */}
+      {registerUrl && (
+        <div className="mb-6 flex flex-col items-center rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+          <p className="mb-2 text-sm font-medium text-[var(--chalk)]">회원가입 바로가기</p>
+          <p className="mb-3 text-xs text-[var(--chalk-muted)]">QR 스캔 시 회원가입 페이지로 이동</p>
+          <a
+            href="/member/register"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block rounded-xl border-2 border-[var(--border)] bg-white p-2"
+            aria-label="회원가입 QR코드"
+          >
+            <img
+              src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${encodeURIComponent(registerUrl)}`}
+              alt="회원가입 링크 QR코드"
+              width={160}
+              height={160}
+              className="block"
+            />
+          </a>
           <Link
             href="/member/register"
-            className="text-sm font-medium text-[var(--primary)] underline hover:no-underline"
+            className="mt-3 inline-block text-sm font-medium text-[var(--primary)] underline hover:no-underline"
           >
             회원가입
           </Link>
         </div>
+      )}
+
+      <p className="mb-4 text-sm text-[var(--chalk-muted)]">
+        전화번호 뒤 4자리를 입력해 주세요.
+      </p>
+
+      {/* QR코드 입력 */}
+      <div className="mb-6 flex flex-col gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
         <div>
           <label htmlFor="qr-input" className="mb-1 block text-sm text-[var(--chalk-muted)]">
             QR코드 입력
@@ -185,14 +217,33 @@ export default function AttendancePage() {
           </button>
         ))}
       </div>
+
+      {/* 결과 모달: 확인 버튼 누르면 닫고 새로고침 */}
       {message && (
-        <p
-          className={`mt-4 text-center text-sm ${
-            message.type === "ok" ? "text-green-400" : "text-red-400"
-          }`}
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 sm:items-center"
+          onClick={closeResultModal}
         >
-          {message.text}
-        </p>
+          <div
+            className="w-full max-w-sm rounded-t-2xl bg-[var(--surface)] p-6 shadow-lg sm:rounded-2xl border border-[var(--border)]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p
+              className={`mb-6 text-center text-sm ${
+                message.type === "ok" ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
+              }`}
+            >
+              {message.text}
+            </p>
+            <button
+              type="button"
+              onClick={closeResultModal}
+              className="w-full rounded-xl bg-[var(--primary)] py-3 font-medium text-white transition hover:bg-[var(--primary-hover)]"
+            >
+              확인
+            </button>
+          </div>
+        </div>
       )}
 
       {/* 2명 이상일 때 회원 선택 모달 */}
