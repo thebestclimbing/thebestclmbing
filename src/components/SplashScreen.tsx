@@ -13,19 +13,19 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[var(--rock)]"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[var(--background)]"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4, ease: "easeInOut" }}
     >
-      {/* 로고 / 타이틀 */}
+      {/* 로고 / 타이틀 - 플랜핏 스타일: 밝은 배경 + 그린 포인트 */}
       <motion.div
         className="flex flex-col items-center gap-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.5 }}
       >
-        {/* 클라이밍 아이콘: 간단한 홀드/산 실루엣 */}
+        {/* 클라이밍 아이콘 */}
         <motion.div
           className="relative h-20 w-20"
           initial={{ scale: 0.8, opacity: 0 }}
@@ -35,7 +35,7 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
           <svg
             viewBox="0 0 64 64"
             fill="none"
-            className="h-full w-full text-[var(--rope)]"
+            className="h-full w-full text-[var(--primary)]"
           >
             <path
               d="M32 8 L44 24 L40 28 L32 20 L24 28 L20 24 Z"
@@ -68,15 +68,15 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
         </motion.p>
       </motion.div>
 
-      {/* 로딩 인디케이터 */}
+      {/* 로딩 인디케이터 - 플랜핏 스타일 */}
       <motion.div
-        className="absolute bottom-24 left-1/2 h-1 w-24 -translate-x-1/2 overflow-hidden rounded-full bg-[var(--wall)]"
+        className="absolute bottom-24 left-1/2 h-1 w-24 -translate-x-1/2 overflow-hidden rounded-full bg-[var(--border)]"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
       >
         <motion.div
-          className="h-full bg-[var(--rope)]"
+          className="h-full bg-[var(--primary)]"
           initial={{ width: "0%" }}
           animate={{ width: "100%" }}
           transition={{ duration: 1.8, ease: "easeInOut" }}

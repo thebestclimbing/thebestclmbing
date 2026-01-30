@@ -41,12 +41,12 @@ export default async function BoardPage() {
         </h1>
         <Link
           href="/board/new"
-          className="rounded-xl bg-[var(--rope)] px-4 py-2.5 text-sm font-medium text-white transition hover:bg-[var(--rope-light)] active:scale-[0.98]"
+          className="btn-primary inline-block text-center text-sm"
         >
           글쓰기
         </Link>
       </div>
-      <div className="overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)]">
+      <div className="card overflow-hidden rounded-2xl">
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="border-b border-[var(--border)]">
@@ -68,12 +68,12 @@ export default async function BoardPage() {
               return (
                 <tr
                   key={row.id}
-                  className="border-b border-[var(--border)] transition hover:bg-[var(--surface)]/50"
+                  className="border-b border-[var(--border)] transition hover:bg-[var(--surface-muted)]"
                 >
                   <td className="p-3">
                     <Link
                       href={"/board/" + row.id}
-                      className="font-medium text-[var(--chalk)] hover:text-[var(--rope-light)] hover:underline"
+                      className="font-medium text-[var(--chalk)] hover:text-[var(--primary)] hover:underline"
                     >
                       {row.title}
                     </Link>
@@ -96,7 +96,7 @@ export default async function BoardPage() {
       <p className="mt-6">
         <Link
           href="/"
-          className="text-sm text-[var(--chalk-muted)] underline hover:text-[var(--rope-light)]"
+          className="text-sm text-[var(--chalk-muted)] underline hover:text-[var(--primary)]"
         >
           메인으로
         </Link>

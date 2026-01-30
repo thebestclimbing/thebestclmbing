@@ -61,7 +61,7 @@ export default async function ExercisePage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
-      <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+      <h1 className="mb-6 text-2xl font-bold text-[var(--chalk)]">
         나의 운동일지
       </h1>
       <ExerciseLogForm
@@ -69,7 +69,7 @@ export default async function ExercisePage() {
         routes={routes ?? []}
       />
       <section className="mt-8">
-        <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+        <h2 className="mb-4 text-lg font-semibold text-[var(--chalk)]">
           기록 목록
         </h2>
         <ExerciseLogList
@@ -79,7 +79,7 @@ export default async function ExercisePage() {
       <p className="mt-6">
         <Link
           href="/"
-          className="text-sm text-zinc-600 underline hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+          className="text-sm text-[var(--chalk-muted)] underline hover:text-[var(--chalk)]"
         >
           메인으로
         </Link>

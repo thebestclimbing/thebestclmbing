@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 interface Initial {
   route_id: string;
@@ -51,7 +52,7 @@ export default function ExerciseLogEdit({
     <div className="flex gap-2">
       <Link
         href={`/exercise/${logId}/edit`}
-        className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
+        className="btn-outline rounded-lg px-4 py-2 text-sm"
       >
         수정
       </Link>
@@ -59,9 +60,16 @@ export default function ExerciseLogEdit({
         type="button"
         onClick={handleDelete}
         disabled={loading}
-        className="rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 disabled:opacity-50 dark:border-red-800 dark:hover:bg-red-950"
+        className="inline-flex items-center gap-2 rounded-lg border border-red-300 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 disabled:opacity-50 disabled:pointer-events-none dark:border-red-800 dark:hover:bg-red-950"
       >
-        삭제
+        {loading ? (
+          <>
+            <LoadingSpinner size="sm" className="text-red-600 dark:text-red-400" />
+            삭제 중...
+          </>
+        ) : (
+          "삭제"
+        )}
       </button>
       {error && (
         <p className="self-center text-sm text-red-600 dark:text-red-400">

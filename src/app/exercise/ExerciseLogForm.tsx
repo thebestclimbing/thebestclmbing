@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { SubmitButton } from "@/components/SubmitButton";
 
 interface RouteRow {
   id: string;
@@ -71,18 +72,11 @@ export default function ExerciseLogForm({
   const maxHold = selectedRoute?.hold_count ?? 0;
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900"
-    >
-      <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
-        새 기록
-      </h2>
+    <form onSubmit={handleSubmit} className="card rounded-2xl p-6">
+      <h2 className="mb-4 text-lg font-semibold text-[var(--chalk)]">새 기록</h2>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-sm text-zinc-600 dark:text-zinc-400">
-            루트 *
-          </label>
+          <label className="mb-1 block text-sm text-[var(--chalk-muted)]">루트 *</label>
           <select
             value={routeId}
             onChange={(e) => {
@@ -91,7 +85,7 @@ export default function ExerciseLogForm({
               if (r) setProgressHoldCount(r.hold_count);
             }}
             required
-            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
+            className="input-base"
           >
             <option value="">선택</option>
             {routes.map((r) => (
@@ -102,91 +96,42 @@ export default function ExerciseLogForm({
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-sm text-zinc-600 dark:text-zinc-400">
-            운동일 *
-          </label>
-          <input
-            type="date"
-            value={loggedAt}
-            onChange={(e) => setLoggedAt(e.target.value)}
-            required
-            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
-          />
+          <label className="mb-1 block text-sm text-[var(--chalk-muted)]">운동일 *</label>
+          <input type="date" value={loggedAt} onChange={(e) => setLoggedAt(e.target.value)} required className="input-base" />
         </div>
         <div>
-          <label className="mb-1 block text-sm text-zinc-600 dark:text-zinc-400">
-            진행한 홀드수 (0 ~ {maxHold})
-          </label>
-          <input
-            type="number"
-            min={0}
-            max={maxHold}
-            value={progressHoldCount}
-            onChange={(e) => setProgressHoldCount(Number(e.target.value))}
-            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
-          />
+          <label className="mb-1 block text-sm text-[var(--chalk-muted)]">진행한 홀드수 (0 ~ {maxHold})</label>
+          <input type="number" min={0} max={maxHold} value={progressHoldCount} onChange={(e) => setProgressHoldCount(Number(e.target.value))} className="input-base" />
         </div>
         <div>
-          <label className="mb-1 block text-sm text-zinc-600 dark:text-zinc-400">
-            등반횟수
-          </label>
-          <input
-            type="number"
-            min={1}
-            value={attemptCount}
-            onChange={(e) => setAttemptCount(Number(e.target.value))}
-            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
-          />
+          <label className="mb-1 block text-sm text-[var(--chalk-muted)]">등반횟수</label>
+          <input type="number" min={1} value={attemptCount} onChange={(e) => setAttemptCount(Number(e.target.value))} className="input-base" />
         </div>
         <div className="flex items-center gap-2 sm:col-span-2">
-          <input
-            type="checkbox"
-            id="isCompleted"
-            checked={isCompleted}
-            onChange={(e) => setIsCompleted(e.target.checked)}
-            className="rounded border-zinc-300"
-          />
-          <label htmlFor="isCompleted" className="text-sm text-zinc-700 dark:text-zinc-300">
-            완등
-          </label>
+          <input type="checkbox" id="isCompleted" checked={isCompleted} onChange={(e) => setIsCompleted(e.target.checked)} className="rounded border-[var(--border)]" />
+          <label htmlFor="isCompleted" className="text-sm text-[var(--chalk)]">완등</label>
         </div>
         <div className="flex items-center gap-2 sm:col-span-2">
-          <input
-            type="checkbox"
-            id="isRoundTrip"
-            checked={isRoundTrip}
-            onChange={(e) => setIsRoundTrip(e.target.checked)}
-            className="rounded border-zinc-300"
-          />
-          <label htmlFor="isRoundTrip" className="text-sm text-zinc-700 dark:text-zinc-300">
-            왕복
-          </label>
+          <input type="checkbox" id="isRoundTrip" checked={isRoundTrip} onChange={(e) => setIsRoundTrip(e.target.checked)} className="rounded border-[var(--border)]" />
+          <label htmlFor="isRoundTrip" className="text-sm text-[var(--chalk)]">왕복</label>
         </div>
         {isRoundTrip && (
           <div>
-            <label className="mb-1 block text-sm text-zinc-600 dark:text-zinc-400">
-              왕복횟수
-            </label>
-            <input
-              type="number"
-              min={0}
-              value={roundTripCount}
-              onChange={(e) => setRoundTripCount(Number(e.target.value))}
-              className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
-            />
+            <label className="mb-1 block text-sm text-[var(--chalk-muted)]">왕복횟수</label>
+            <input type="number" min={0} value={roundTripCount} onChange={(e) => setRoundTripCount(Number(e.target.value))} className="input-base" />
           </div>
         )}
       </div>
-      {error && (
-        <p className="mt-2 text-sm text-red-600 dark:text-red-400">{error}</p>
-      )}
-      <button
-        type="submit"
-        disabled={loading}
-        className="mt-4 rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
-      >
-        {loading ? "저장 중..." : "저장"}
-      </button>
+      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      <div className="mt-4">
+        <SubmitButton
+          loading={loading}
+          loadingLabel="저장 중..."
+          className="btn-primary disabled:pointer-events-none"
+        >
+          저장
+        </SubmitButton>
+      </div>
     </form>
   );
 }

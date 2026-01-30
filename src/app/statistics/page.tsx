@@ -146,22 +146,22 @@ export default async function StatisticsPage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
-      <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+      <h1 className="mb-6 text-2xl font-bold text-[var(--chalk)]">
         통계
       </h1>
 
       <section className="mb-10">
-        <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+        <h2 className="mb-4 text-lg font-semibold text-[var(--chalk)]">
           1. 회원별 운동일지에 등록한 루트 통계
         </h2>
-        <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="overflow-x-auto rounded-2xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-zinc-200 dark:border-zinc-700">
-                <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+              <tr className="border-b border-[var(--border)]">
+                <th className="p-3 font-medium text-[var(--chalk)]">
                   회원명
                 </th>
-                <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+                <th className="p-3 font-medium text-[var(--chalk)]">
                   등록 루트 수
                 </th>
               </tr>
@@ -170,12 +170,12 @@ export default async function StatisticsPage() {
               {memberStats.map((s) => (
                 <tr
                   key={s.memberId}
-                  className="border-b border-zinc-100 dark:border-zinc-800"
+                  className="border-b border-[var(--border)]"
                 >
-                  <td className="p-3 text-zinc-900 dark:text-zinc-50">
+                  <td className="p-3 text-[var(--chalk)]">
                     {s.memberName}
                   </td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">
+                  <td className="p-3 text-[var(--chalk-muted)]">
                     {s.routeCount}
                   </td>
                 </tr>
@@ -184,25 +184,25 @@ export default async function StatisticsPage() {
           </table>
         </div>
         {memberStats.length === 0 && (
-          <p className="mt-2 text-zinc-500">데이터 없음</p>
+          <p className="mt-2 text-[var(--chalk-muted)]">데이터 없음</p>
         )}
       </section>
 
       <section className="mb-10">
-        <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+        <h2 className="mb-4 text-lg font-semibold text-[var(--chalk)]">
           2. 루트별 평균 진행한 홀드수 통계
         </h2>
-        <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="overflow-x-auto rounded-2xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-zinc-200 dark:border-zinc-700">
-                <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+              <tr className="border-b border-[var(--border)]">
+                <th className="p-3 font-medium text-[var(--chalk)]">
                   루트명
                 </th>
-                <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+                <th className="p-3 font-medium text-[var(--chalk)]">
                   평균 진행 홀드수
                 </th>
-                <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+                <th className="p-3 font-medium text-[var(--chalk)]">
                   기록 수
                 </th>
               </tr>
@@ -211,15 +211,15 @@ export default async function StatisticsPage() {
               {routeHoldStats.map((s) => (
                 <tr
                   key={s.routeId}
-                  className="border-b border-zinc-100 dark:border-zinc-800"
+                  className="border-b border-[var(--border)]"
                 >
-                  <td className="p-3 text-zinc-900 dark:text-zinc-50">
+                  <td className="p-3 text-[var(--chalk)]">
                     {s.routeName}
                   </td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">
+                  <td className="p-3 text-[var(--chalk-muted)]">
                     {s.avgHold}
                   </td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">
+                  <td className="p-3 text-[var(--chalk-muted)]">
                     {s.count}
                   </td>
                 </tr>
@@ -228,25 +228,25 @@ export default async function StatisticsPage() {
           </table>
         </div>
         {routeHoldStats.length === 0 && (
-          <p className="mt-2 text-zinc-500">데이터 없음</p>
+          <p className="mt-2 text-[var(--chalk-muted)]">데이터 없음</p>
         )}
       </section>
 
       <section className="mb-10">
-        <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+        <h2 className="mb-4 text-lg font-semibold text-[var(--chalk)]">
           3. 루트별 완등 통계
         </h2>
-        <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="overflow-x-auto rounded-2xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-zinc-200 dark:border-zinc-700">
-                <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+              <tr className="border-b border-[var(--border)]">
+                <th className="p-3 font-medium text-[var(--chalk)]">
                   루트명
                 </th>
-                <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+                <th className="p-3 font-medium text-[var(--chalk)]">
                   완등 수
                 </th>
-                <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+                <th className="p-3 font-medium text-[var(--chalk)]">
                   전체 기록 수
                 </th>
               </tr>
@@ -255,15 +255,15 @@ export default async function StatisticsPage() {
               {routeCompleteStats.map((s) => (
                 <tr
                   key={s.routeId}
-                  className="border-b border-zinc-100 dark:border-zinc-800"
+                  className="border-b border-[var(--border)]"
                 >
-                  <td className="p-3 text-zinc-900 dark:text-zinc-50">
+                  <td className="p-3 text-[var(--chalk)]">
                     {s.routeName}
                   </td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">
+                  <td className="p-3 text-[var(--chalk-muted)]">
                     {s.completed}
                   </td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">
+                  <td className="p-3 text-[var(--chalk-muted)]">
                     {s.total}
                   </td>
                 </tr>
@@ -272,22 +272,22 @@ export default async function StatisticsPage() {
           </table>
         </div>
         {routeCompleteStats.length === 0 && (
-          <p className="mt-2 text-zinc-500">데이터 없음</p>
+          <p className="mt-2 text-[var(--chalk-muted)]">데이터 없음</p>
         )}
       </section>
 
       <section className="mb-10">
-        <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+        <h2 className="mb-4 text-lg font-semibold text-[var(--chalk)]">
           4. 기간별 운동일지에 등록한 루트 통계 (월별)
         </h2>
-        <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="overflow-x-auto rounded-2xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-zinc-200 dark:border-zinc-700">
-                <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+              <tr className="border-b border-[var(--border)]">
+                <th className="p-3 font-medium text-[var(--chalk)]">
                   기간(월)
                 </th>
-                <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+                <th className="p-3 font-medium text-[var(--chalk)]">
                   기록 수
                 </th>
               </tr>
@@ -296,12 +296,12 @@ export default async function StatisticsPage() {
               {monthRouteStats.map((s) => (
                 <tr
                   key={s.month}
-                  className="border-b border-zinc-100 dark:border-zinc-800"
+                  className="border-b border-[var(--border)]"
                 >
-                  <td className="p-3 text-zinc-900 dark:text-zinc-50">
+                  <td className="p-3 text-[var(--chalk)]">
                     {s.month}
                   </td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">
+                  <td className="p-3 text-[var(--chalk-muted)]">
                     {s.logCount}건
                   </td>
                 </tr>
@@ -310,25 +310,25 @@ export default async function StatisticsPage() {
           </table>
         </div>
         {monthRouteStats.length === 0 && (
-          <p className="mt-2 text-zinc-500">데이터 없음</p>
+          <p className="mt-2 text-[var(--chalk-muted)]">데이터 없음</p>
         )}
       </section>
 
       <section className="mb-10">
-        <h2 className="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+        <h2 className="mb-4 text-lg font-semibold text-[var(--chalk)]">
           5. 기간별 완등 통계 (월별)
         </h2>
-        <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+        <div className="overflow-x-auto rounded-2xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-zinc-200 dark:border-zinc-700">
-                <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+              <tr className="border-b border-[var(--border)]">
+                <th className="p-3 font-medium text-[var(--chalk)]">
                   기간(월)
                 </th>
-                <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+                <th className="p-3 font-medium text-[var(--chalk)]">
                   완등 수
                 </th>
-                <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+                <th className="p-3 font-medium text-[var(--chalk)]">
                   전체 기록 수
                 </th>
               </tr>
@@ -337,15 +337,15 @@ export default async function StatisticsPage() {
               {monthCompleteStats.map((s) => (
                 <tr
                   key={s.month}
-                  className="border-b border-zinc-100 dark:border-zinc-800"
+                  className="border-b border-[var(--border)]"
                 >
-                  <td className="p-3 text-zinc-900 dark:text-zinc-50">
+                  <td className="p-3 text-[var(--chalk)]">
                     {s.month}
                   </td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">
+                  <td className="p-3 text-[var(--chalk-muted)]">
                     {s.completed}
                   </td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">
+                  <td className="p-3 text-[var(--chalk-muted)]">
                     {s.total}
                   </td>
                 </tr>
@@ -354,7 +354,7 @@ export default async function StatisticsPage() {
           </table>
         </div>
         {monthCompleteStats.length === 0 && (
-          <p className="mt-2 text-zinc-500">데이터 없음</p>
+          <p className="mt-2 text-[var(--chalk-muted)]">데이터 없음</p>
         )}
       </section>
 

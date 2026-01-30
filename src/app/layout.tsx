@@ -26,7 +26,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#0c0a09",
+  themeColor: "#22c55e",
 };
 
 export default function RootLayout({
@@ -39,7 +39,7 @@ export default function RootLayout({
       <head>
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
       <body className="min-h-screen bg-[var(--background)] text-[var(--foreground)] antialiased">
         <SplashProvider>

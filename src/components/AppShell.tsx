@@ -20,61 +20,43 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {/* 데스크톱 헤더 */}
+      {/* 데스크톱 헤더 - 플랜핏 스타일: 밝은 배경, 심플 */}
       <header className="sticky top-0 z-50 hidden border-b border-[var(--border)] bg-[var(--surface)]/95 backdrop-blur md:block">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
           <Link href="/" className="text-lg font-bold text-[var(--chalk)]">
             베스트클라이밍
           </Link>
           <nav className="flex items-center gap-6 text-sm">
-            <Link
-              href="/board"
-              className="text-[var(--chalk-muted)] transition hover:text-[var(--rope-light)]"
-            >
+            <Link href="/board" className="text-[var(--chalk-muted)] transition hover:text-[var(--primary)]">
               게시판
             </Link>
-            <Link
-              href="/notice"
-              className="text-[var(--chalk-muted)] transition hover:text-[var(--rope-light)]"
-            >
+            <Link href="/notice" className="text-[var(--chalk-muted)] transition hover:text-[var(--primary)]">
               공지
             </Link>
-            <Link
-              href="/attendance"
-              className="text-[var(--chalk-muted)] transition hover:text-[var(--rope-light)]"
-            >
+            <Link href="/attendance" className="text-[var(--chalk-muted)] transition hover:text-[var(--primary)]">
               출석
             </Link>
-            <Link
-              href="/gallery"
-              className="text-[var(--chalk-muted)] transition hover:text-[var(--rope-light)]"
-            >
+            <Link href="/gallery" className="text-[var(--chalk-muted)] transition hover:text-[var(--primary)]">
               사진첩
             </Link>
-            <Link
-              href="/statistics"
-              className="text-[var(--chalk-muted)] transition hover:text-[var(--rope-light)]"
-            >
+            <Link href="/statistics" className="text-[var(--chalk-muted)] transition hover:text-[var(--primary)]">
               통계
             </Link>
-            <Link
-              href="/login"
-              className="text-[var(--chalk-muted)] transition hover:text-[var(--rope-light)]"
-            >
+            <Link href="/login" className="text-[var(--chalk-muted)] transition hover:text-[var(--primary)]">
               로그인
             </Link>
           </nav>
         </div>
       </header>
 
-      {/* 모바일 상단 바 */}
+      {/* 모바일 상단 바 - 플랜핏 스타일 */}
       <header className="sticky top-0 z-50 flex items-center justify-between border-b border-[var(--border)] bg-[var(--surface)] px-4 py-3 pt-[var(--safe-area-top)] md:hidden">
         <Link href="/" className="text-base font-bold text-[var(--chalk)]">
           베스트클라이밍
         </Link>
         <Link
           href="/login"
-          className="rounded-full px-3 py-1.5 text-sm text-[var(--chalk-muted)]"
+          className="rounded-full bg-[var(--surface-muted)] px-4 py-2 text-sm font-medium text-[var(--chalk)]"
         >
           로그인
         </Link>
@@ -84,13 +66,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
-      {/* 모바일 하단 탭 바 (앱 느낌) */}
+      {/* 모바일 하단 탭 바 - 플랜핏 스타일: 아이콘 + 라벨, 액티브 시 그린 */}
       {!hideTabBar && (
         <motion.nav
           initial={{ y: 80, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--border)] bg-[var(--surface)]/95 backdrop-blur md:hidden tab-bar-height"
+          className="fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--border)] bg-[var(--surface)] md:hidden tab-bar-height"
           style={{ paddingBottom: "var(--safe-area-bottom)" }}
         >
           <div className="flex h-16 items-center justify-around">
@@ -100,12 +82,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2"
+                  className={`flex flex-1 flex-col items-center justify-center gap-0.5 py-2 transition ${active ? "text-[var(--primary)]" : "text-[var(--chalk-muted)]"}`}
                 >
                   <span className="text-xl">{item.icon}</span>
-                  <span
-                    className={`text-xs ${active ? "font-semibold text-[var(--rope-light)]" : "text-[var(--chalk-muted)]"}`}
-                  >
+                  <span className={`text-xs ${active ? "font-semibold" : ""}`}>
                     {item.label}
                   </span>
                 </Link>

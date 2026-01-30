@@ -12,7 +12,7 @@ export interface CompleterRow {
     grade_detail: GradeDetail;
     name: string;
     hold_count: number;
-  };
+  } | null;
   profile: { id: string; name: string } | null;
 }
 
@@ -32,7 +32,14 @@ function gradeRank(gradeValue: GradeValue, gradeDetail: GradeDetail): number {
   return v * 10 + d;
 }
 
-function sortCompleters(a: CompleterRow, b: CompleterRow): number {
+function hasValidRoute(row: CompleterRow): row is CompleterRow & { route: NonNullable<CompleterRow["route"]> } {
+  return row.route != null && row.route.grade_value != null && row.route.grade_detail != null;
+}
+
+function sortCompleters(
+  a: CompleterRow & { route: NonNullable<CompleterRow["route"]> },
+  b: CompleterRow & { route: NonNullable<CompleterRow["route"]> }
+): number {
   const rankA = gradeRank(
     a.route.grade_value as GradeValue,
     a.route.grade_detail as GradeDetail
@@ -44,7 +51,9 @@ function sortCompleters(a: CompleterRow, b: CompleterRow): number {
   return rankB - rankA;
 }
 
-function toDisplay(row: CompleterRow): CompleterDisplay {
+function toDisplay(
+  row: CompleterRow & { route: NonNullable<CompleterRow["route"]> }
+): CompleterDisplay {
   const wallTypeLabel =
     WALL_TYPE_LABELS[row.route.wall_type as keyof typeof WALL_TYPE_LABELS] ?? row.route.wall_type;
   return {
@@ -107,7 +116,7 @@ export async function getTodayCompleters(max = 3): Promise<CompleterDisplay[]> {
     .eq("logged_at", today);
 
   if (error) return [];
-  const rows = normalizeCompleterRows(data ?? []);
+  const rows = normalizeCompleterRows(data ?? []).filter(hasValidRoute);
   rows.sort(sortCompleters);
   return rows.slice(0, max).map(toDisplay);
 }
@@ -130,7 +139,7 @@ export async function getWeeklyCompleters(max = 3): Promise<CompleterDisplay[]> 
     .lte("logged_at", end);
 
   if (error) return [];
-  const rows = normalizeCompleterRows(data ?? []);
+  const rows = normalizeCompleterRows(data ?? []).filter(hasValidRoute);
   rows.sort(sortCompleters);
   return rows.slice(0, max).map(toDisplay);
 }

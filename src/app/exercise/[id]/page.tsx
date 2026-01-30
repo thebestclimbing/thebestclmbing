@@ -63,56 +63,56 @@ export default async function ExerciseDetailPage({
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
-      <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+      <h1 className="mb-6 text-2xl font-bold text-[var(--chalk)]">
         운동일지 상세
       </h1>
-      <div className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="card rounded-2xl p-6">
         <dl className="grid gap-4 sm:grid-cols-2">
           <div>
-            <dt className="text-sm text-zinc-500 dark:text-zinc-400">운동일</dt>
-            <dd className="font-medium text-zinc-900 dark:text-zinc-50">
+            <dt className="text-sm text-[var(--chalk-muted)]">운동일</dt>
+            <dd className="font-medium text-[var(--chalk)]">
               {row.logged_at}
             </dd>
           </div>
           <div>
-            <dt className="text-sm text-zinc-500 dark:text-zinc-400">암벽구분</dt>
-            <dd className="font-medium text-zinc-900 dark:text-zinc-50">
+            <dt className="text-sm text-[var(--chalk-muted)]">암벽구분</dt>
+            <dd className="font-medium text-[var(--chalk)]">
               {wallLabel}
             </dd>
           </div>
           <div>
-            <dt className="text-sm text-zinc-500 dark:text-zinc-400">루트명</dt>
-            <dd className="font-medium text-zinc-900 dark:text-zinc-50">
+            <dt className="text-sm text-[var(--chalk-muted)]">루트명</dt>
+            <dd className="font-medium text-[var(--chalk)]">
               {row.route.name}
             </dd>
           </div>
           <div>
-            <dt className="text-sm text-zinc-500 dark:text-zinc-400">난이도</dt>
-            <dd className="font-medium text-zinc-900 dark:text-zinc-50">
+            <dt className="text-sm text-[var(--chalk-muted)]">난이도</dt>
+            <dd className="font-medium text-[var(--chalk)]">
               {grade}
             </dd>
           </div>
           <div>
-            <dt className="text-sm text-zinc-500 dark:text-zinc-400">홀드수</dt>
-            <dd className="font-medium text-zinc-900 dark:text-zinc-50">
+            <dt className="text-sm text-[var(--chalk-muted)]">홀드수</dt>
+            <dd className="font-medium text-[var(--chalk)]">
               {row.progress_hold_count} / {row.route.hold_count}
             </dd>
           </div>
           <div>
-            <dt className="text-sm text-zinc-500 dark:text-zinc-400">등반횟수</dt>
-            <dd className="font-medium text-zinc-900 dark:text-zinc-50">
+            <dt className="text-sm text-[var(--chalk-muted)]">등반횟수</dt>
+            <dd className="font-medium text-[var(--chalk)]">
               {row.attempt_count}회
             </dd>
           </div>
           <div>
-            <dt className="text-sm text-zinc-500 dark:text-zinc-400">완등여부</dt>
-            <dd className="font-medium text-zinc-900 dark:text-zinc-50">
+            <dt className="text-sm text-[var(--chalk-muted)]">완등여부</dt>
+            <dd className="font-medium text-[var(--chalk)]">
               {row.is_completed ? "완등" : "-"}
             </dd>
           </div>
           <div>
-            <dt className="text-sm text-zinc-500 dark:text-zinc-400">왕복</dt>
-            <dd className="font-medium text-zinc-900 dark:text-zinc-50">
+            <dt className="text-sm text-[var(--chalk-muted)]">왕복</dt>
+            <dd className="font-medium text-[var(--chalk)]">
               {row.is_round_trip ? `왕복 ${row.round_trip_count}회` : "-"}
             </dd>
           </div>
@@ -136,7 +136,7 @@ export default async function ExerciseDetailPage({
       <p className="mt-6">
         <Link
           href="/exercise"
-          className="text-sm text-zinc-600 underline hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+          className="text-sm text-[var(--chalk-muted)] underline hover:text-[var(--chalk)]"
         >
           목록으로
         </Link>

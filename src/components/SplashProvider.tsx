@@ -12,7 +12,14 @@ export function SplashProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    const seen = typeof window !== "undefined" && sessionStorage.getItem(SPLASH_KEY);
+    let seen = false;
+    try {
+      if (typeof window !== "undefined" && window.sessionStorage) {
+        seen = !!sessionStorage.getItem(SPLASH_KEY);
+      }
+    } catch {
+      // 인앱 브라우저·시크릿 등에서 sessionStorage 접근 불가 시 무시
+    }
     if (!seen) {
       setShowSplash(true);
     }
@@ -20,15 +27,19 @@ export function SplashProvider({ children }: { children: React.ReactNode }) {
 
   const handleSplashComplete = () => {
     setShowSplash(false);
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem(SPLASH_KEY, "1");
+    try {
+      if (typeof window !== "undefined" && window.sessionStorage) {
+        sessionStorage.setItem(SPLASH_KEY, "1");
+      }
+    } catch {
+      // 저장 실패해도 스플래시만 닫기
     }
   };
 
   if (!mounted) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[var(--rock)]">
-        <div className="h-8 w-8 animate-pulse rounded-full bg-[var(--rope)] opacity-60" />
+      <div className="flex min-h-screen items-center justify-center bg-[var(--background)]">
+        <div className="h-8 w-8 animate-pulse rounded-full bg-[var(--primary)] opacity-60" />
       </div>
     );
   }

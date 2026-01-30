@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export default function RegisterPage() {
   const [name, setName] = useState("");
@@ -72,7 +73,7 @@ export default function RegisterPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] px-3 py-2.5 text-[var(--chalk)] focus:border-[var(--rope)] focus:outline-none focus:ring-1 focus:ring-[var(--rope)]"
+            className="input-base"
           />
         </div>
         <div>
@@ -84,7 +85,7 @@ export default function RegisterPage() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] px-3 py-2.5 text-[var(--chalk)] focus:border-[var(--rope)] focus:outline-none focus:ring-1 focus:ring-[var(--rope)]"
+            className="input-base"
           />
         </div>
         <div>
@@ -98,24 +99,20 @@ export default function RegisterPage() {
             onChange={(e) => setPhone(e.target.value)}
             placeholder="01012345678"
             required
-            className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] px-3 py-2.5 text-[var(--chalk)] focus:border-[var(--rope)] focus:outline-none focus:ring-1 focus:ring-[var(--rope)]"
+            className="input-base"
           />
           <p className="mt-1 text-xs text-[var(--chalk-muted)]">로그인·출석체크 시 전화번호 뒤 4자리가 사용됩니다.</p>
         </div>
         {error && (
           <p className="text-sm text-red-400">{error}</p>
         )}
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded-xl bg-[var(--rope)] px-4 py-3 font-medium text-white transition hover:bg-[var(--rope-light)] disabled:opacity-50 active:scale-[0.98]"
-        >
-          {loading ? "가입 중..." : "가입하기"}
-        </button>
+        <SubmitButton loading={loading} loadingLabel="가입 중...">
+          가입하기
+        </SubmitButton>
       </form>
       <p className="mt-4 text-center text-sm text-[var(--chalk-muted)]">
         이미 계정이 있으신가요?{" "}
-        <Link href="/login" className="text-[var(--rope-light)] underline">
+        <Link href="/login" className="text-[var(--primary)] font-medium underline">
           로그인
         </Link>
       </p>

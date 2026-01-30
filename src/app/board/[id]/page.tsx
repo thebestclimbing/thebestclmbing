@@ -36,22 +36,22 @@ export default async function BoardDetailPage({
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
-      <article className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
-        <h1 className="mb-4 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+      <article className="card rounded-2xl p-6">
+        <h1 className="mb-4 text-2xl font-bold text-[var(--chalk)]">
           {row.title}
         </h1>
-        <div className="mb-4 flex gap-4 text-sm text-zinc-500 dark:text-zinc-400">
+        <div className="mb-4 flex gap-4 text-sm text-[var(--chalk-muted)]">
           <span>작성자: {author?.name ?? "-"}</span>
           <span>작성일자: {new Date(row.created_at).toLocaleString("ko-KR")}</span>
         </div>
-        <div className="whitespace-pre-wrap text-zinc-700 dark:text-zinc-300">
+        <div className="whitespace-pre-wrap text-[var(--chalk)]">
           {row.body || "(내용 없음)"}
         </div>
       </article>
       <p className="mt-6">
         <Link
           href="/board"
-          className="text-sm text-zinc-600 underline hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+          className="text-sm text-[var(--chalk-muted)] underline hover:text-[var(--chalk)]"
         >
           목록으로
         </Link>

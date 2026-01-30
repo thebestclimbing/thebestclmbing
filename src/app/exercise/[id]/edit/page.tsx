@@ -44,7 +44,7 @@ export default async function ExerciseLogEditPage({
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
-      <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+      <h1 className="mb-6 text-2xl font-bold text-[var(--chalk)]">
         운동일지 수정
       </h1>
       <ExerciseLogUpdateForm
@@ -64,7 +64,7 @@ export default async function ExerciseLogEditPage({
       <p className="mt-6">
         <Link
           href={"/exercise/" + id}
-          className="text-sm text-zinc-600 underline hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+          className="text-sm text-[var(--chalk-muted)] underline hover:text-[var(--chalk)]"
         >
           상세로
         </Link>

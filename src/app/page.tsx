@@ -5,8 +5,8 @@ import { HomeMotion } from "@/components/HomeMotion";
 
 function CompleterCard({ c, rank }: { c: CompleterDisplay; rank: number }) {
   return (
-    <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] p-4">
-      <span className="mr-2 font-semibold text-[var(--rope-light)]">{rank}위</span>
+    <div className="card rounded-2xl p-4">
+      <span className="mr-2 font-semibold text-[var(--primary)]">{rank}위</span>
       <span className="text-[var(--chalk-muted)]">{c.wallTypeLabel}</span>
       <span className="mx-2 text-[var(--border)]">|</span>
       <span className="font-medium text-[var(--chalk)]">{c.routeName}</span>
@@ -41,7 +41,7 @@ export default async function Home() {
         </h2>
         <div className="flex flex-col gap-3">
           {todayCompleters.length === 0 ? (
-            <p className="rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] p-6 text-center text-[var(--chalk-muted)]">
+            <p className="card rounded-2xl p-6 text-center text-[var(--chalk-muted)]">
               오늘 완등 기록이 없습니다.
             </p>
           ) : (
@@ -59,7 +59,7 @@ export default async function Home() {
         </h2>
         <div className="flex flex-col gap-3">
           {weeklyCompleters.length === 0 ? (
-            <p className="rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] p-6 text-center text-[var(--chalk-muted)]">
+            <p className="card rounded-2xl p-6 text-center text-[var(--chalk-muted)]">
               이번 주 완등 기록이 없습니다.
             </p>
           ) : (
@@ -72,34 +72,19 @@ export default async function Home() {
 
       {/* 액션 링크 */}
       <section className="flex flex-wrap gap-3">
-        <Link
-          href="/member"
-          className="rounded-xl bg-[var(--rope)] px-4 py-3 text-sm font-medium text-white transition hover:bg-[var(--rope-light)] active:scale-[0.98]"
-        >
+        <Link href="/member" className="btn-primary inline-block text-center text-sm">
           회원정보
         </Link>
-        <Link
-          href="/exercise"
-          className="rounded-xl bg-[var(--rope)] px-4 py-3 text-sm font-medium text-white transition hover:bg-[var(--rope-light)] active:scale-[0.98]"
-        >
+        <Link href="/exercise" className="btn-primary inline-block text-center text-sm">
           나의 운동일지
         </Link>
-        <Link
-          href="/member/register"
-          className="rounded-xl border border-[var(--border)] px-4 py-3 text-sm font-medium text-[var(--chalk)] transition hover:bg-[var(--surface-elevated)] active:scale-[0.98]"
-        >
+        <Link href="/member/register" className="btn-outline inline-block text-center text-sm">
           회원가입
         </Link>
-        <Link
-          href="/reservation"
-          className="rounded-xl border border-[var(--border)] px-4 py-3 text-sm font-medium text-[var(--chalk)] transition hover:bg-[var(--surface-elevated)] active:scale-[0.98]"
-        >
+        <Link href="/reservation" className="btn-outline inline-block text-center text-sm">
           일일체험 예약
         </Link>
-        <Link
-          href="/admin"
-          className="rounded-xl border border-[var(--rope)] px-4 py-3 text-sm font-medium text-[var(--rope-light)] transition hover:bg-[var(--rope)]/10 active:scale-[0.98]"
-        >
+        <Link href="/admin" className="btn-outline inline-block border-[var(--primary)] text-center text-sm text-[var(--primary)] hover:bg-[var(--primary-muted)]">
           관리자
         </Link>
       </section>

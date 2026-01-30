@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { SubmitButton } from "@/components/SubmitButton";
 
 type ProfileRow = { id: string; email: string | null; name: string; phone: string };
 
@@ -18,6 +19,7 @@ function LoginForm() {
   const next = searchParams.get("next") ?? "/";
 
   async function doSignIn(profile: ProfileRow) {
+    setLoading(true);
     const supabase = createClient();
     const loginEmail = profile.email || `${(profile.phone || "").replace(/\D/g, "")}@guest.local`;
     const digits = tail4.replace(/\D/g, "").slice(-4);
@@ -49,11 +51,10 @@ function LoginForm() {
       return;
     }
     const supabase = createClient();
-    const { data: profiles } = await supabase
-      .from("profiles")
-      .select("id, email, name, phone")
-      .eq("name", name.trim())
-      .eq("phone_tail4", digits);
+    const { data: profiles } = await supabase.rpc("get_profiles_for_login", {
+      p_name: name.trim(),
+      p_tail4: digits,
+    });
 
     setLoading(false);
 
@@ -90,7 +91,7 @@ function LoginForm() {
             onChange={(e) => setName(e.target.value)}
             required
             placeholder="홍길동"
-            className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] px-3 py-2.5 text-[var(--chalk)] placeholder:text-[var(--chalk-muted)] focus:border-[var(--rope)] focus:outline-none focus:ring-1 focus:ring-[var(--rope)]"
+            className="input-base"
           />
         </div>
         <div>
@@ -106,19 +107,15 @@ function LoginForm() {
             onChange={(e) => setTail4(e.target.value.replace(/\D/g, "").slice(0, 4))}
             required
             placeholder="1234"
-            className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] px-3 py-2.5 text-[var(--chalk)] placeholder:text-[var(--chalk-muted)] focus:border-[var(--rope)] focus:outline-none focus:ring-1 focus:ring-[var(--rope)]"
+            className="input-base"
           />
         </div>
         {error && (
           <p className="text-sm text-red-400">{error}</p>
         )}
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded-xl bg-[var(--rope)] px-4 py-3 font-medium text-white transition hover:bg-[var(--rope-light)] disabled:opacity-50 active:scale-[0.98]"
-        >
-          {loading ? "로그인 중..." : "로그인"}
-        </button>
+        <SubmitButton loading={loading} loadingLabel="로그인 중...">
+          로그인
+        </SubmitButton>
       </form>
 
       {/* 회원 선택 모달 (이름+뒷4자리 동일한 회원이 2명 이상일 때) */}
@@ -128,7 +125,7 @@ function LoginForm() {
           onClick={() => setSelectModal(null)}
         >
           <div
-            className="w-full max-w-sm rounded-t-2xl bg-[var(--surface-elevated)] p-6 shadow-xl sm:rounded-2xl"
+            className="w-full max-w-sm rounded-t-2xl bg-[var(--surface)] p-6 shadow-lg sm:rounded-2xl border border-[var(--border)]"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="mb-4 text-lg font-semibold text-[var(--chalk)]">
@@ -143,13 +140,23 @@ function LoginForm() {
                   <button
                     type="button"
                     onClick={() => doSignIn(p)}
-                    className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-left text-[var(--chalk)] transition hover:bg-[var(--rope)]/20 active:scale-[0.98]"
+                    disabled={loading}
+                    className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-left text-[var(--chalk)] transition hover:bg-[var(--primary-muted)] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
                   >
-                    <span className="font-medium">{p.name}</span>
-                    {p.phone && (
-                      <span className="ml-2 text-sm text-[var(--chalk-muted)]">
-                        {p.phone}
+                    {loading ? (
+                      <span className="inline-flex items-center gap-2">
+                        <span className="spinner spinner-sm inline-block" />
+                        로그인 중...
                       </span>
+                    ) : (
+                      <>
+                        <span className="font-medium">{p.name}</span>
+                        {p.phone && (
+                          <span className="ml-2 text-sm text-[var(--chalk-muted)]">
+                            {p.phone}
+                          </span>
+                        )}
+                      </>
                     )}
                   </button>
                 </li>
@@ -168,7 +175,7 @@ function LoginForm() {
 
       <p className="mt-4 text-center text-sm text-[var(--chalk-muted)]">
         계정이 없으신가요?{" "}
-        <Link href="/member/register" className="text-[var(--rope-light)] underline">
+        <Link href="/member/register" className="text-[var(--primary)] font-medium underline">
           회원가입
         </Link>
       </p>

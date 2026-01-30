@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { SubmitButton } from "@/components/SubmitButton";
 
 export default function GalleryWriteForm({ authorId }: { authorId: string }) {
   const router = useRouter();
@@ -42,60 +43,25 @@ export default function GalleryWriteForm({ authorId }: { authorId: string }) {
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900"
-    >
+    <form onSubmit={handleSubmit} className="card rounded-2xl p-6">
       <div className="mb-4">
-        <label className="mb-1 block text-sm text-zinc-600 dark:text-zinc-400">
-          제목 *
-        </label>
-        <input
-          type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
-        />
+        <label className="mb-1 block text-sm text-[var(--chalk-muted)]">제목 *</label>
+        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required className="input-base" />
       </div>
       <div className="mb-4">
-        <label className="mb-1 block text-sm text-zinc-600 dark:text-zinc-400">
-          본문
-        </label>
-        <textarea
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          rows={4}
-          className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
-        />
+        <label className="mb-1 block text-sm text-[var(--chalk-muted)]">본문</label>
+        <textarea value={body} onChange={(e) => setBody(e.target.value)} rows={4} className="input-base min-h-[100px]" />
       </div>
       <div className="mb-4">
-        <label className="mb-1 block text-sm text-zinc-600 dark:text-zinc-400">
-          이미지 URL (한 줄에 하나씩)
-        </label>
-        <textarea
-          value={imageUrls}
-          onChange={(e) => setImageUrls(e.target.value)}
-          rows={3}
-          placeholder="https://..."
-          className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-zinc-900 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
-        />
+        <label className="mb-1 block text-sm text-[var(--chalk-muted)]">이미지 URL (한 줄에 하나씩)</label>
+        <textarea value={imageUrls} onChange={(e) => setImageUrls(e.target.value)} rows={3} placeholder="https://..." className="input-base" />
       </div>
-      {error && (
-        <p className="mb-2 text-sm text-red-600 dark:text-red-400">{error}</p>
-      )}
+      {error && <p className="mb-2 text-sm text-red-600">{error}</p>}
       <div className="flex gap-2">
-        <button
-          type="submit"
-          disabled={loading}
-          className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
-        >
-          {loading ? "저장 중..." : "등록"}
-        </button>
-        <Link
-          href="/gallery"
-          className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium hover:bg-zinc-100 dark:border-zinc-700 dark:hover:bg-zinc-800"
-        >
+        <SubmitButton loading={loading} loadingLabel="등록 중..." className="btn-primary disabled:pointer-events-none">
+          등록
+        </SubmitButton>
+        <Link href="/gallery" className="btn-outline inline-block px-4 py-3 text-center text-sm">
           취소
         </Link>
       </div>

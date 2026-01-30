@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 export default function RouteDeleteButton({
   routeId,
@@ -28,9 +29,16 @@ export default function RouteDeleteButton({
       type="button"
       onClick={handleDelete}
       disabled={loading}
-      className="text-sm text-red-600 hover:underline disabled:opacity-50 dark:text-red-400"
+      className="inline-flex items-center gap-1.5 text-sm text-red-600 hover:underline disabled:opacity-50 disabled:pointer-events-none dark:text-red-400"
     >
-      {loading ? "삭제 중..." : "삭제"}
+      {loading ? (
+        <>
+          <LoadingSpinner size="sm" className="text-red-600 dark:text-red-400" />
+          삭제 중...
+        </>
+      ) : (
+        "삭제"
+      )}
     </button>
   );
 }

@@ -38,12 +38,12 @@ export default async function GalleryPage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+        <h1 className="text-2xl font-bold text-[var(--chalk)]">
           사진첩
         </h1>
         <Link
           href="/gallery/new"
-          className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-200"
+          className="btn-primary inline-block px-4 py-2 text-center text-sm"
         >
           등록
         </Link>
@@ -57,7 +57,7 @@ export default async function GalleryPage() {
             <Link
               key={row.id}
               href={"/gallery/" + row.id}
-              className="overflow-hidden rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900"
+              className="card overflow-hidden rounded-2xl"
             >
               {thumb ? (
                 <img
@@ -66,15 +66,15 @@ export default async function GalleryPage() {
                   className="h-40 w-full object-cover"
                 />
               ) : (
-                <div className="flex h-40 w-full items-center justify-center bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
+                <div className="flex h-40 w-full items-center justify-center bg-[var(--surface-muted)] text-[var(--chalk-muted)]">
                   이미지 없음
                 </div>
               )}
               <div className="p-3">
-                <h2 className="font-medium text-zinc-900 dark:text-zinc-50">
+                <h2 className="font-medium text-[var(--chalk)]">
                   {row.title}
                 </h2>
-                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                <p className="text-xs text-[var(--chalk-muted)]">
                   {author?.name ?? "-"} ·{" "}
                   {new Date(row.created_at).toLocaleDateString("ko-KR")}
                 </p>
@@ -84,12 +84,12 @@ export default async function GalleryPage() {
         })}
       </div>
       {(!posts || posts.length === 0) && (
-        <p className="mt-4 text-zinc-500">등록된 글이 없습니다.</p>
+        <p className="mt-4 text-[var(--chalk-muted)]">등록된 글이 없습니다.</p>
       )}
       <p className="mt-6">
         <Link
           href="/"
-          className="text-sm text-zinc-600 underline hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+          className="text-sm text-[var(--chalk-muted)] underline hover:text-[var(--chalk)]"
         >
           메인으로
         </Link>

@@ -35,20 +35,20 @@ export default async function NoticePage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
-      <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+      <h1 className="mb-6 text-2xl font-bold text-[var(--chalk)]">
         공지사항
       </h1>
-      <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-zinc-200 dark:border-zinc-700">
-              <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+            <tr className="border-b border-[var(--border)]">
+              <th className="p-3 font-medium text-[var(--chalk)]">
                 제목
               </th>
-              <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+              <th className="p-3 font-medium text-[var(--chalk)]">
                 작성자
               </th>
-              <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+              <th className="p-3 font-medium text-[var(--chalk)]">
                 작성일자
               </th>
             </tr>
@@ -60,20 +60,20 @@ export default async function NoticePage() {
               return (
                 <tr
                   key={row.id}
-                  className="border-b border-zinc-100 dark:border-zinc-800"
+                  className="border-b border-[var(--border)]"
                 >
                   <td className="p-3">
                     <Link
                       href={"/notice/" + row.id}
-                      className="font-medium text-zinc-900 hover:underline dark:text-zinc-50"
+                      className="font-medium text-[var(--chalk)] hover:underline"
                     >
                       {row.title}
                     </Link>
                   </td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">
+                  <td className="p-3 text-[var(--chalk-muted)]">
                     {author?.name ?? "-"}
                   </td>
-                  <td className="p-3 text-zinc-500 dark:text-zinc-400">
+                  <td className="p-3 text-[var(--chalk-muted)]">
                     {new Date(row.created_at).toLocaleDateString("ko-KR")}
                   </td>
                 </tr>
@@ -83,12 +83,12 @@ export default async function NoticePage() {
         </table>
       </div>
       {(!notices || notices.length === 0) && (
-        <p className="mt-4 text-zinc-500">공지가 없습니다.</p>
+        <p className="mt-4 text-[var(--chalk-muted)]">공지가 없습니다.</p>
       )}
       <p className="mt-6">
         <Link
           href="/"
-          className="text-sm text-zinc-600 underline hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+          className="text-sm text-[var(--chalk-muted)] underline hover:text-[var(--chalk)]"
         >
           메인으로
         </Link>

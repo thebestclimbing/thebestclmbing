@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
+import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 const KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "지우기", "0", "확인"];
 
@@ -93,7 +94,7 @@ export default function AttendancePage() {
       <p className="mb-4 text-sm text-[var(--chalk-muted)]">
         전화번호 뒤 4자리를 입력해 주세요.
       </p>
-      <div className="mb-6 rounded-xl border border-[var(--border)] bg-[var(--surface-elevated)] p-5 text-center text-2xl tracking-[0.5em] text-[var(--chalk)]">
+      <div className="card mb-6 rounded-2xl p-5 text-center text-2xl tracking-[0.5em] text-[var(--chalk)]">
         {digits.padEnd(4, "·")}
       </div>
       <div className="grid grid-cols-3 gap-2">
@@ -105,13 +106,20 @@ export default function AttendancePage() {
             disabled={loading && key === "확인"}
             className={
               key === "확인"
-                ? "col-span-1 rounded-xl bg-[var(--rope)] py-3 font-medium text-white transition hover:bg-[var(--rope-light)] active:scale-95 disabled:opacity-50"
+                ? "col-span-1 inline-flex items-center justify-center gap-2 rounded-xl bg-[var(--primary)] py-3 font-medium text-white transition hover:bg-[var(--primary-hover)] active:scale-95 disabled:opacity-50 disabled:pointer-events-none"
                 : key === "지우기"
-                  ? "rounded-xl border border-[var(--border)] py-3 text-sm transition hover:bg-[var(--surface-elevated)] active:scale-95"
-                  : "rounded-xl border border-[var(--border)] py-3 text-lg font-medium transition hover:bg-[var(--surface-elevated)] active:scale-95"
+                  ? "rounded-xl border border-[var(--border)] py-3 text-sm transition hover:bg-[var(--surface-muted)] active:scale-95"
+                  : "rounded-xl border border-[var(--border)] py-3 text-lg font-medium transition hover:bg-[var(--surface-muted)] active:scale-95"
             }
           >
-            {key}
+            {key === "확인" && loading ? (
+              <>
+                <LoadingSpinner size="sm" className="text-white" />
+                확인 중...
+              </>
+            ) : (
+              key
+            )}
           </button>
         ))}
       </div>
@@ -132,7 +140,7 @@ export default function AttendancePage() {
           onClick={() => setSelectModal(null)}
         >
           <div
-            className="w-full max-w-sm rounded-t-2xl bg-[var(--surface-elevated)] p-6 shadow-xl sm:rounded-2xl"
+            className="w-full max-w-sm rounded-t-2xl bg-[var(--surface)] p-6 shadow-lg sm:rounded-2xl border border-[var(--border)]"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="mb-4 text-lg font-semibold text-[var(--chalk)]">
@@ -148,13 +156,22 @@ export default function AttendancePage() {
                     type="button"
                     onClick={() => submitAttendance(p.id, p.name)}
                     disabled={loading}
-                    className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-left text-[var(--chalk)] transition hover:bg-[var(--rope)]/20 active:scale-[0.98] disabled:opacity-50"
+                    className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-left text-[var(--chalk)] transition hover:bg-[var(--primary-muted)] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none"
                   >
-                    <span className="font-medium">{p.name}</span>
-                    {p.phone && (
-                      <span className="ml-2 text-sm text-[var(--chalk-muted)]">
-                        {p.phone}
+                    {loading ? (
+                      <span className="inline-flex items-center gap-2">
+                        <LoadingSpinner size="sm" />
+                        출석 처리 중...
                       </span>
+                    ) : (
+                      <>
+                        <span className="font-medium">{p.name}</span>
+                        {p.phone && (
+                          <span className="ml-2 text-sm text-[var(--chalk-muted)]">
+                            {p.phone}
+                          </span>
+                        )}
+                      </>
                     )}
                   </button>
                 </li>

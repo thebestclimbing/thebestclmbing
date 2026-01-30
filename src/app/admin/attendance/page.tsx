@@ -52,26 +52,26 @@ export default async function AdminAttendancePage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
-      <h1 className="mb-6 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+      <h1 className="mb-6 text-2xl font-bold text-[var(--chalk)]">
         출석관리
       </h1>
-      <p className="mb-4 text-sm text-zinc-500">
+      <p className="mb-4 text-sm text-[var(--chalk-muted)]">
         회원명, 출석일자, 체크 시각
       </p>
-      <div className="overflow-x-auto rounded-lg border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+      <div className="overflow-x-auto rounded-2xl border border-[var(--border)] bg-[var(--surface)] overflow-hidden">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-zinc-200 dark:border-zinc-700">
-              <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+            <tr className="border-b border-[var(--border)]">
+              <th className="p-3 font-medium text-[var(--chalk)]">
                 출석일자
               </th>
-              <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+              <th className="p-3 font-medium text-[var(--chalk)]">
                 회원명
               </th>
-              <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+              <th className="p-3 font-medium text-[var(--chalk)]">
                 전화뒷4자리
               </th>
-              <th className="p-3 font-medium text-zinc-900 dark:text-zinc-50">
+              <th className="p-3 font-medium text-[var(--chalk)]">
                 체크 시각
               </th>
             </tr>
@@ -83,18 +83,18 @@ export default async function AdminAttendancePage() {
               return (
                 <tr
                   key={row.id}
-                  className="border-b border-zinc-100 dark:border-zinc-800"
+                  className="border-b border-[var(--border)]"
                 >
-                  <td className="p-3 text-zinc-900 dark:text-zinc-50">
+                  <td className="p-3 text-[var(--chalk)]">
                     {row.attended_at}
                   </td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">
+                  <td className="p-3 text-[var(--chalk-muted)]">
                     {profile?.name ?? "-"}
                   </td>
-                  <td className="p-3 text-zinc-600 dark:text-zinc-400">
+                  <td className="p-3 text-[var(--chalk-muted)]">
                     {profile?.phone_tail4 ?? "-"}
                   </td>
-                  <td className="p-3 text-zinc-500 dark:text-zinc-400">
+                  <td className="p-3 text-[var(--chalk-muted)]">
                     {new Date(row.checked_at).toLocaleString("ko-KR")}
                   </td>
                 </tr>
@@ -104,12 +104,12 @@ export default async function AdminAttendancePage() {
         </table>
       </div>
       {(!attendances || attendances.length === 0) && (
-        <p className="mt-4 text-zinc-500">출석 기록이 없습니다.</p>
+        <p className="mt-4 text-[var(--chalk-muted)]">출석 기록이 없습니다.</p>
       )}
       <p className="mt-6">
         <Link
           href="/admin"
-          className="text-sm text-zinc-600 underline hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
+          className="text-sm text-[var(--chalk-muted)] underline hover:text-[var(--chalk)]"
         >
           관리자 홈
         </Link>
