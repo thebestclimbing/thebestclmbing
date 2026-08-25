@@ -80,6 +80,8 @@ export default function Home() {
   const [loadingNotice, setLoadingNotice] = useState(true);
   const [rankPointLeaders, setRankPointLeaders] = useState<{ rank: number; name: string; point: number }[]>([]);
   const [loadingRankPoint, setLoadingRankPoint] = useState(true);
+  const [outdoorRankPointLeaders, setOutdoorRankPointLeaders] = useState<{ rank: number; name: string; point: number }[]>([]);
+  const [loadingOutdoorRankPoint, setLoadingOutdoorRankPoint] = useState(true);
   type ActiveEvent = { id: string; title: string; prize_description: string; start_date: string; end_date: string };
   const [activeEvents, setActiveEvents] = useState<ActiveEvent[]>([]);
   const [loadingEvents, setLoadingEvents] = useState(true);
@@ -210,6 +212,22 @@ export default function Home() {
       .catch(() => {})
       .finally(() => {
         if (!cancelled) setLoadingRankPoint(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/outdoor-rank-point-leaders")
+      .then((res) => (res.ok ? res.json() : { leaders: [] }))
+      .then((data) => {
+        if (!cancelled && Array.isArray(data?.leaders)) setOutdoorRankPointLeaders(data.leaders);
+      })
+      .catch(() => {})
+      .finally(() => {
+        if (!cancelled) setLoadingOutdoorRankPoint(false);
       });
     return () => {
       cancelled = true;
@@ -358,8 +376,8 @@ export default function Home() {
         )}
 
         <section
-          className="mb-6 grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4 md:mb-8"
-          aria-label="랭킹 순위 및 출석왕·홀드왕"
+          className="mb-6 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4 md:mb-8"
+          aria-label="랭킹 순위·외벽 랭킹 순위 및 홀드왕·출석왕"
         >
           <div
             className="card flex flex-col rounded-2xl p-3 md:p-4"
@@ -397,59 +415,93 @@ export default function Home() {
               </ul>
             )}
           </div>
-          <div className="grid grid-cols-1 gap-3 md:contents">
-            <div className="card flex flex-col rounded-2xl p-3 md:p-4" aria-label={`${currentMonthLabel}의 출석왕`}>
-              <h2 className="mb-2 text-sm font-semibold text-[var(--chalk)] md:text-base">
-                {currentMonthLabel}의 출석왕
+          <div
+            className="card flex flex-col rounded-2xl p-3 md:p-4"
+            aria-label="외벽 랭킹 순위"
+          >
+            <div className="mb-2 flex items-center justify-between gap-2">
+              <h2 className="text-sm font-semibold text-[var(--chalk)] md:text-base">
+                외벽 랭킹 순위
               </h2>
-              {loadingAttendanceKing ? (
-                <div className="flex flex-1 items-center justify-center py-2">
-                  <LoadingSpinner size="md" />
-                </div>
-              ) : attendanceKingLeaders.length === 0 ? (
-                <div className="flex flex-col items-center gap-1 py-4 text-center">
-                  <span className="text-2xl">📅</span>
-                  <p className="text-sm text-[var(--chalk-muted)]">아직 이번 달 기록이 없어요</p>
-                  <p className="text-xs text-[var(--chalk-muted)]/60">첫 번째 출석왕이 되어보세요!</p>
-                </div>
-              ) : (
-                <ul className="flex flex-col gap-1.5">
-                  {attendanceKingLeaders.map((l) => (
-                    <li key={l.name} className="grid grid-cols-[2rem_1fr_4rem] items-center gap-1 rounded-lg bg-[var(--surface-muted)]/50 px-2 py-1.5 md:px-3">
-                      <span className="font-semibold text-[var(--primary)]">{l.rank}위</span>
-                      <span className="truncate text-center font-medium text-[var(--chalk)]">{l.name}</span>
-                      <span className="whitespace-nowrap text-right text-sm text-[var(--chalk-muted)]">{l.count}회</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
+              <Link
+                href="/statistics/outdoor-ranking"
+                className="shrink-0 text-sm text-[var(--chalk-muted)] underline hover:text-[var(--chalk)]"
+              >
+                더보기
+              </Link>
             </div>
-            <div className="card flex flex-col rounded-2xl p-3 md:p-4" aria-label={`${currentMonthLabel}의 홀드왕`}>
-              <h2 className="mb-2 text-sm font-semibold text-[var(--chalk)] md:text-base">
-                {currentMonthLabel}의 홀드왕
-              </h2>
-              {loadingHoldKing ? (
-                <div className="flex flex-1 items-center justify-center py-2">
-                  <LoadingSpinner size="md" />
-                </div>
-              ) : holdKingLeaders.length === 0 ? (
-                <div className="flex flex-col items-center gap-1 py-4 text-center">
-                  <span className="text-2xl">🏆</span>
-                  <p className="text-sm text-[var(--chalk-muted)]">아직 이번 달 기록이 없어요</p>
-                  <p className="text-xs text-[var(--chalk-muted)]/60">첫 번째 홀드왕이 되어보세요!</p>
-                </div>
-              ) : (
-                <ul className="flex flex-col gap-1.5">
-                  {holdKingLeaders.map((l) => (
-                    <li key={l.name} className="grid grid-cols-[2rem_1fr_4rem] items-center gap-1 rounded-lg bg-[var(--surface-muted)]/50 px-2 py-1.5 md:px-3">
-                      <span className="font-semibold text-[var(--primary)]">{l.rank}위</span>
-                      <span className="truncate text-center font-medium text-[var(--chalk)]">{l.name}</span>
-                      <span className="whitespace-nowrap text-right text-sm text-[var(--chalk-muted)]">{l.count}개</span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            {loadingOutdoorRankPoint ? (
+              <div className="flex flex-1 justify-center py-6">
+                <LoadingSpinner size="md" />
+              </div>
+            ) : outdoorRankPointLeaders.length === 0 ? (
+              <p className="py-2 text-[var(--chalk-muted)]">완등 랭크포인트 기록이 없습니다.</p>
+            ) : (
+              <ul className="flex flex-col gap-1.5">
+                {outdoorRankPointLeaders.map((l) => (
+                  <li
+                    key={l.rank}
+                    className="grid grid-cols-[2rem_1fr_4.5rem] items-center gap-1 rounded-lg bg-[var(--surface-muted)]/50 px-2 py-1.5 md:px-3"
+                  >
+                    <span className="font-semibold text-[var(--primary)]">{l.rank}위</span>
+                    <span className="truncate text-center font-medium text-[var(--chalk)]">{l.name}</span>
+                    <span className="whitespace-nowrap text-right text-sm text-[var(--chalk-muted)]">{l.point}점</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div className="card flex flex-col rounded-2xl p-3 md:p-4" aria-label={`${currentMonthLabel}의 홀드왕`}>
+            <h2 className="mb-2 text-sm font-semibold text-[var(--chalk)] md:text-base">
+              {currentMonthLabel}의 홀드왕
+            </h2>
+            {loadingHoldKing ? (
+              <div className="flex flex-1 items-center justify-center py-2">
+                <LoadingSpinner size="md" />
+              </div>
+            ) : holdKingLeaders.length === 0 ? (
+              <div className="flex flex-col items-center gap-1 py-4 text-center">
+                <span className="text-2xl">🏆</span>
+                <p className="text-sm text-[var(--chalk-muted)]">아직 이번 달 기록이 없어요</p>
+                <p className="text-xs text-[var(--chalk-muted)]/60">첫 번째 홀드왕이 되어보세요!</p>
+              </div>
+            ) : (
+              <ul className="flex flex-col gap-1.5">
+                {holdKingLeaders.map((l) => (
+                  <li key={l.name} className="grid grid-cols-[2rem_1fr_4rem] items-center gap-1 rounded-lg bg-[var(--surface-muted)]/50 px-2 py-1.5 md:px-3">
+                    <span className="font-semibold text-[var(--primary)]">{l.rank}위</span>
+                    <span className="truncate text-center font-medium text-[var(--chalk)]">{l.name}</span>
+                    <span className="whitespace-nowrap text-right text-sm text-[var(--chalk-muted)]">{l.count}개</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div className="card flex flex-col rounded-2xl p-3 md:p-4" aria-label={`${currentMonthLabel}의 출석왕`}>
+            <h2 className="mb-2 text-sm font-semibold text-[var(--chalk)] md:text-base">
+              {currentMonthLabel}의 출석왕
+            </h2>
+            {loadingAttendanceKing ? (
+              <div className="flex flex-1 items-center justify-center py-2">
+                <LoadingSpinner size="md" />
+              </div>
+            ) : attendanceKingLeaders.length === 0 ? (
+              <div className="flex flex-col items-center gap-1 py-4 text-center">
+                <span className="text-2xl">📅</span>
+                <p className="text-sm text-[var(--chalk-muted)]">아직 이번 달 기록이 없어요</p>
+                <p className="text-xs text-[var(--chalk-muted)]/60">첫 번째 출석왕이 되어보세요!</p>
+              </div>
+            ) : (
+              <ul className="flex flex-col gap-1.5">
+                {attendanceKingLeaders.map((l) => (
+                  <li key={l.name} className="grid grid-cols-[2rem_1fr_4rem] items-center gap-1 rounded-lg bg-[var(--surface-muted)]/50 px-2 py-1.5 md:px-3">
+                    <span className="font-semibold text-[var(--primary)]">{l.rank}위</span>
+                    <span className="truncate text-center font-medium text-[var(--chalk)]">{l.name}</span>
+                    <span className="whitespace-nowrap text-right text-sm text-[var(--chalk-muted)]">{l.count}회</span>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </section>
 

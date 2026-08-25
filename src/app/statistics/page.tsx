@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const STATISTICS_LINKS = [
   { href: "/statistics/ranking", label: "랭킹 순위" },
+  { href: "/statistics/outdoor-ranking", label: "외벽 랭킹 순위" },
   { href: "/statistics/member-completions", label: "회원별 루트 완등 통계" },
   { href: "/statistics/route-holds", label: "루트별 평균 진행한 홀드수 통계" },
   { href: "/statistics/route-completions", label: "루트별 완등 통계" },
