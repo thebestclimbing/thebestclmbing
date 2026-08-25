@@ -125,6 +125,7 @@ const TAB_ITEMS = [
 const ADMIN_LINKS = [
   { href: "/admin/members", label: "회원관리" },
   { href: "/admin/routes", label: "암벽문제" },
+  { href: "/admin/outdoor-routes", label: "외벽문제" },
   { href: "/admin/attendance", label: "출석관리" },
   { href: "/admin/reservations", label: "예약관리" },
   { href: "/admin/completions", label: "완등관리" },
@@ -261,6 +262,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   className={`block px-4 py-2 text-sm ${pathname.startsWith("/exercise/members") ? "font-semibold text-[var(--primary)]" : "text-[var(--chalk)]"} hover:bg-[var(--surface-muted)]`}
                 >
                   회원 운동일지
+                </Link>
+                <Link
+                  href="/exercise/outdoor"
+                  onClick={() => setExerciseOpen(false)}
+                  className={`block px-4 py-2 text-sm ${pathname.startsWith("/exercise/outdoor") ? "font-semibold text-[var(--primary)]" : "text-[var(--chalk)]"} hover:bg-[var(--surface-muted)]`}
+                >
+                  외벽운동일지
                 </Link>
               </motion.div>
             </>
@@ -499,6 +507,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </Link>
                 <Link href="/exercise/members" onClick={() => setMenuOpen(false)} className="rounded-xl px-4 py-2.5 pl-6 text-sm text-[var(--chalk)] hover:bg-[var(--surface-muted)]">
                   회원 운동일지
+                </Link>
+                <Link href="/exercise/outdoor" onClick={() => setMenuOpen(false)} className="rounded-xl px-4 py-2.5 pl-6 text-sm text-[var(--chalk)] hover:bg-[var(--surface-muted)]">
+                  외벽운동일지
                 </Link>
               </div>
                 <Link href="/attendance" onClick={() => setMenuOpen(false)} className="rounded-xl px-4 py-3 text-[var(--chalk)] hover:bg-[var(--surface-muted)]">

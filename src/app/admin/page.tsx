@@ -16,6 +16,11 @@ export default function AdminPage() {
           </Link>
         </li>
         <li>
+          <Link href="/admin/outdoor-routes" className="text-blue-600 hover:underline">
+            외벽문제관리
+          </Link>
+        </li>
+        <li>
           <Link href="/admin/attendance" className="text-blue-600 hover:underline">
             출석관리
           </Link>

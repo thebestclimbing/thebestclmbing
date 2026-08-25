@@ -9,6 +9,12 @@ export type WallType =
   | "overhang"           // 오버벽
   | "extreme_overhang";  // 극오버
 
+export type OutdoorLocation = "ilsan" | "munhak";
+
+export type HoldColor =
+  | "red" | "orange" | "yellow" | "green" | "blue"
+  | "indigo" | "violet" | "white" | "black" | "pink";
+
 export type GradeValue = "5.9" | "10" | "11" | "12" | "13";
 export type GradeDetail = "a" | "b" | "c" | "d";
 
@@ -26,6 +32,35 @@ export interface Profile {
   membership_end: string | null;
   membership_paused?: boolean; // 회원권 정지 여부
   role: UserRole;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OutdoorRoute {
+  id: string;
+  outdoor_location: OutdoorLocation;
+  wall_type: WallType;
+  grade_value: GradeValue;
+  grade_detail: GradeDetail;
+  hold_color: HoldColor;
+  rank_point: number;
+  clip_count: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OutdoorExerciseLog {
+  id: string;
+  profile_id: string;
+  outdoor_route_id: string;
+  progress_clip_count: number;
+  attempt_count: number;
+  is_completed: boolean;
+  completion_requested: boolean;
+  is_round_trip: boolean;
+  round_trip_count: number;
+  logged_at: string;
+  memo: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -120,7 +155,9 @@ export interface Database {
     Tables: {
       profiles: { Row: Profile; Insert: Omit<Profile, "id" | "created_at" | "updated_at">; Update: Partial<Profile> };
       routes: { Row: Route; Insert: Omit<Route, "id" | "created_at" | "updated_at">; Update: Partial<Route> };
+      outdoor_routes: { Row: OutdoorRoute; Insert: Omit<OutdoorRoute, "id" | "created_at" | "updated_at">; Update: Partial<OutdoorRoute> };
       exercise_logs: { Row: ExerciseLog; Insert: Omit<ExerciseLog, "id" | "created_at" | "updated_at">; Update: Partial<ExerciseLog> };
+      outdoor_exercise_logs: { Row: OutdoorExerciseLog; Insert: Omit<OutdoorExerciseLog, "id" | "created_at" | "updated_at">; Update: Partial<OutdoorExerciseLog> };
       attendances: { Row: Attendance; Insert: Omit<Attendance, "id" | "created_at">; Update: Partial<Attendance> };
       daily_reservations: { Row: DailyReservation; Insert: Omit<DailyReservation, "id" | "created_at" | "updated_at">; Update: Partial<DailyReservation> };
       free_board_posts: { Row: FreeBoardPost; Insert: Omit<FreeBoardPost, "id" | "created_at" | "updated_at">; Update: Partial<FreeBoardPost> };
@@ -132,6 +169,27 @@ export interface Database {
 }
 
 // 화면 표시용 라벨
+export const OUTDOOR_LOCATION_LABELS: Record<OutdoorLocation, string> = {
+  ilsan: "일산",
+  munhak: "문학",
+};
+
+export const HOLD_COLOR_LABELS: Record<HoldColor, string> = {
+  red: "빨강",
+  orange: "주황",
+  yellow: "노랑",
+  green: "초록",
+  blue: "파랑",
+  indigo: "남색",
+  violet: "보라",
+  white: "흰색",
+  black: "검정",
+  pink: "분홍",
+};
+
+export const OUTDOOR_LOCATIONS: OutdoorLocation[] = ["ilsan", "munhak"];
+export const HOLD_COLORS: HoldColor[] = ["red", "orange", "yellow", "green", "blue", "indigo", "violet", "white", "black", "pink"];
+
 export const WALL_TYPE_LABELS: Record<WallType, string> = {
   vertical: "직벽",
   slight_overhang: "약오버벽",

@@ -5,7 +5,13 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 
-export function CompletionConfirmButton({ logId }: { logId: string }) {
+export function CompletionConfirmButton({
+  logId,
+  table = "exercise_logs",
+}: {
+  logId: string;
+  table?: "exercise_logs" | "outdoor_exercise_logs";
+}) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -15,7 +21,7 @@ export function CompletionConfirmButton({ logId }: { logId: string }) {
     setError(null);
     const supabase = createClient();
     const { error: err } = await supabase
-      .from("exercise_logs")
+      .from(table)
       .update({ is_completed: true, completion_requested: false })
       .eq("id", logId);
     setLoading(false);
