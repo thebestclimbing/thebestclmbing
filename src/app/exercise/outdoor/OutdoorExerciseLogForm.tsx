@@ -3,35 +3,34 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { SubmitButton } from "@/components/SubmitButton";
-import { RouteSelect } from "@/components/RouteSelect";
-import type { LogInsertPayload } from "./ExerciseLogSection";
+import { OutdoorRouteSelect } from "@/components/OutdoorRouteSelect";
+import type { OutdoorLogInsertPayload } from "./OutdoorExerciseLogSection";
 
-interface RouteRow {
+interface OutdoorRouteRow {
   id: string;
+  outdoor_location: string;
   wall_type: string;
   grade_value: string;
   grade_detail: string;
-  name: string;
-  hold_count: number;
+  hold_color: string;
+  clip_count: number;
 }
 
-export default function ExerciseLogForm({
+export default function OutdoorExerciseLogForm({
   profileId,
   routes,
   completedRouteIds = [],
-  eventRouteIds = [],
   onSuccess,
   onInsert,
 }: {
   profileId: string;
-  routes: RouteRow[];
+  routes: OutdoorRouteRow[];
   completedRouteIds?: string[];
-  eventRouteIds?: string[];
   onSuccess?: () => void;
-  onInsert?: (payload: LogInsertPayload) => void;
+  onInsert?: (payload: OutdoorLogInsertPayload) => void;
 }) {
   const [routeId, setRouteId] = useState("");
-  const [progressHoldCountStr, setProgressHoldCountStr] = useState("");
+  const [progressClipCountStr, setProgressClipCountStr] = useState("");
   const [attemptCountStr, setAttemptCountStr] = useState("1");
   const [isRoundTrip, setIsRoundTrip] = useState(false);
   const [roundTripCount, setRoundTripCount] = useState(0);
@@ -44,17 +43,17 @@ export default function ExerciseLogForm({
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!routeId) {
-      setError("루트를 선택해 주세요.");
+      setError("문제를 선택해 주세요.");
       return;
     }
-    const progressHoldCount = Math.max(0, parseInt(progressHoldCountStr, 10) || 0);
+    const progressClipCount = Math.max(0, parseInt(progressClipCountStr, 10) || 0);
     setError("");
     setLoading(true);
     const supabase = createClient();
-    const { error: err } = await supabase.from("exercise_logs").insert({
+    const { error: err } = await supabase.from("outdoor_exercise_logs").insert({
       profile_id: profileId,
-      route_id: routeId,
-      progress_hold_count: progressHoldCount,
+      outdoor_route_id: routeId,
+      progress_clip_count: progressClipCount,
       attempt_count: Math.max(1, parseInt(attemptCountStr, 10) || 1),
       is_completed: false,
       completion_requested: false,
@@ -70,14 +69,14 @@ export default function ExerciseLogForm({
     const selectedRoute = routes.find((r) => r.id === routeId)!;
     onInsert?.({
       route: selectedRoute,
-      progress_hold_count: progressHoldCount,
+      progress_clip_count: progressClipCount,
       attempt_count: Math.max(1, parseInt(attemptCountStr, 10) || 1),
       is_round_trip: isRoundTrip,
       round_trip_count: roundTripCount,
       logged_at: loggedAt,
     });
     setRouteId("");
-    setProgressHoldCountStr("");
+    setProgressClipCountStr("");
     setAttemptCountStr("1");
     setIsRoundTrip(false);
     setRoundTripCount(0);
@@ -93,19 +92,18 @@ export default function ExerciseLogForm({
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <div className="mb-1 flex items-center gap-2">
-            <label className="block text-sm text-[var(--chalk-muted)]">루트 *</label>
+            <label className="block text-sm text-[var(--chalk-muted)]">문제 *</label>
             {isRouteAlreadyCompleted && (
               <span className="inline-block rounded border border-[var(--border)] bg-white px-1.5 py-0.5 text-xs font-medium text-green-700 dark:bg-[var(--surface)] dark:border-[var(--border)] dark:text-green-400">
                 ✓ 완등 인증됨
               </span>
             )}
           </div>
-          <RouteSelect
+          <OutdoorRouteSelect
             routes={routes}
             value={routeId}
             onChange={setRouteId}
-            onSelectRoute={(r) => setProgressHoldCountStr(String(r.hold_count))}
-            eventRouteIds={eventRouteIds}
+            onSelectRoute={(r) => setProgressClipCountStr(String(r.clip_count))}
             required
           />
         </div>
@@ -114,15 +112,15 @@ export default function ExerciseLogForm({
           <input type="date" value={loggedAt} onChange={(e) => setLoggedAt(e.target.value)} required className="input-base" />
         </div>
         <div>
-          <label className="mb-1 block text-sm text-[var(--chalk-muted)]">진행한 홀드수</label>
+          <label className="mb-1 block text-sm text-[var(--chalk-muted)]">진행한 클립수</label>
           <input
             type="text"
             inputMode="numeric"
             min={0}
-            value={progressHoldCountStr}
+            value={progressClipCountStr}
             onChange={(e) => {
               const v = e.target.value.replace(/\D/g, "");
-              if (v === "" || Number(v) >= 0) setProgressHoldCountStr(v);
+              if (v === "" || Number(v) >= 0) setProgressClipCountStr(v);
             }}
             placeholder="0"
             className="input-base"
@@ -133,8 +131,8 @@ export default function ExerciseLogForm({
           <input type="number" min={1} value={attemptCountStr} onChange={(e) => setAttemptCountStr(e.target.value)} className="input-base" />
         </div>
         <div className="flex items-center gap-2 sm:col-span-2">
-          <input type="checkbox" id="isRoundTrip" checked={isRoundTrip} onChange={(e) => setIsRoundTrip(e.target.checked)} className="rounded border-[var(--border)]" />
-          <label htmlFor="isRoundTrip" className="text-sm text-[var(--chalk)]">왕복</label>
+          <input type="checkbox" id="isRoundTripOutdoor" checked={isRoundTrip} onChange={(e) => setIsRoundTrip(e.target.checked)} className="rounded border-[var(--border)]" />
+          <label htmlFor="isRoundTripOutdoor" className="text-sm text-[var(--chalk)]">왕복</label>
         </div>
         {isRoundTrip && (
           <div>
