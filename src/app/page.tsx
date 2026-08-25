@@ -377,15 +377,15 @@ export default function Home() {
 
         <section
           className="mb-6 grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4 md:mb-8"
-          aria-label="랭킹 순위·외벽 랭킹 순위 및 홀드왕·출석왕"
+          aria-label="암장랭크·외벽랭크 및 홀드왕·출석왕"
         >
           <div
             className="card flex flex-col rounded-2xl p-3 md:p-4"
-            aria-label="랭킹 순위"
+            aria-label="암장랭크"
           >
             <div className="mb-2 flex items-center justify-between gap-2">
               <h2 className="text-sm font-semibold text-[var(--chalk)] md:text-base">
-                랭킹 순위
+                암장랭크
               </h2>
               <Link
                 href="/statistics/ranking"
@@ -417,11 +417,11 @@ export default function Home() {
           </div>
           <div
             className="card flex flex-col rounded-2xl p-3 md:p-4"
-            aria-label="외벽 랭킹 순위"
+            aria-label="외벽랭크"
           >
             <div className="mb-2 flex items-center justify-between gap-2">
               <h2 className="text-sm font-semibold text-[var(--chalk)] md:text-base">
-                외벽 랭킹 순위
+                외벽랭크
               </h2>
               <Link
                 href="/statistics/outdoor-ranking"
