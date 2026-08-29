@@ -6,11 +6,11 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import {
   OUTDOOR_LOCATION_LABELS,
-  WALL_TYPE_LABELS,
+  OUTDOOR_WALL_TYPE_LABELS,
   HOLD_COLOR_LABELS,
   formatGrade,
 } from "@/types/database";
-import type { GradeDetail, GradeValue, OutdoorLocation, HoldColor } from "@/types/database";
+import type { GradeDetail, GradeValue, OutdoorLocation, OutdoorWallType, HoldColor } from "@/types/database";
 import { LoadingSpinner } from "@/components/LoadingSpinner";
 
 interface LogItem {
@@ -155,7 +155,7 @@ export default function OutdoorExerciseLogList({
       <ul className="flex flex-col gap-2">
         {paginated.map((log) => {
           const wallLabel =
-            WALL_TYPE_LABELS[log.route.wall_type as keyof typeof WALL_TYPE_LABELS] ??
+            OUTDOOR_WALL_TYPE_LABELS[log.route.wall_type as OutdoorWallType] ??
             log.route.wall_type;
           const grade = formatGrade(log.route.grade_value, log.route.grade_detail);
           const certDate = completedRouteIdToDate[log.route.id];

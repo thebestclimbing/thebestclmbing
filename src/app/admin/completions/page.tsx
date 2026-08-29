@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { WALL_TYPE_LABELS, OUTDOOR_LOCATION_LABELS, HOLD_COLOR_LABELS, formatGrade } from "@/types/database";
-import type { GradeDetail, GradeValue, OutdoorLocation, HoldColor } from "@/types/database";
+import { WALL_TYPE_LABELS, OUTDOOR_WALL_TYPE_LABELS, OUTDOOR_LOCATION_LABELS, HOLD_COLOR_LABELS, formatGrade } from "@/types/database";
+import type { GradeDetail, GradeValue, OutdoorLocation, OutdoorWallType, HoldColor } from "@/types/database";
 import { CompletionConfirmButton } from "./CompletionConfirmButton";
 
 export default async function AdminCompletionsPage() {
@@ -141,7 +141,7 @@ export default async function AdminCompletionsPage() {
               }
               const grade = formatGrade(r.route.grade_value, r.route.grade_detail);
               const wallLabel =
-                WALL_TYPE_LABELS[r.route.wall_type as keyof typeof WALL_TYPE_LABELS] ??
+                OUTDOOR_WALL_TYPE_LABELS[r.route.wall_type as OutdoorWallType] ??
                 r.route.wall_type;
               const locationLabel = OUTDOOR_LOCATION_LABELS[r.route.outdoor_location] ?? r.route.outdoor_location;
               const colorLabel = HOLD_COLOR_LABELS[r.route.hold_color] ?? r.route.hold_color;

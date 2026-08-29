@@ -3,11 +3,11 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import {
   OUTDOOR_LOCATION_LABELS,
-  WALL_TYPE_LABELS,
+  OUTDOOR_WALL_TYPE_LABELS,
   HOLD_COLOR_LABELS,
   formatGrade,
 } from "@/types/database";
-import type { GradeDetail, GradeValue, WallType, OutdoorLocation, HoldColor } from "@/types/database";
+import type { GradeDetail, GradeValue, OutdoorWallType, OutdoorLocation, HoldColor } from "@/types/database";
 import OutdoorRouteDeleteButton from "./OutdoorRouteDeleteButton";
 import OutdoorRouteForm from "./OutdoorRouteForm";
 
@@ -57,7 +57,7 @@ export default async function AdminOutdoorRoutesPage() {
           <tbody>
             {(routes ?? []).map((r) => {
               const locationLabel = OUTDOOR_LOCATION_LABELS[r.outdoor_location as OutdoorLocation] ?? r.outdoor_location;
-              const wallLabel = WALL_TYPE_LABELS[r.wall_type as keyof typeof WALL_TYPE_LABELS] ?? r.wall_type;
+              const wallLabel = OUTDOOR_WALL_TYPE_LABELS[r.wall_type as OutdoorWallType] ?? r.wall_type;
               const grade = formatGrade(r.grade_value as GradeValue, r.grade_detail as GradeDetail);
               const colorLabel = HOLD_COLOR_LABELS[r.hold_color as HoldColor] ?? r.hold_color;
               const label = `${locationLabel} ${wallLabel} ${grade} ${colorLabel}`;

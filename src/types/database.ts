@@ -9,6 +9,12 @@ export type WallType =
   | "overhang"           // 오버벽
   | "extreme_overhang";  // 극오버
 
+export type OutdoorWallType =
+  | "vertical"          // 직벽
+  | "left_overhang"     // 좌측오버행
+  | "right_overhang"    // 우측오버행
+  | "center_overhang";  // 중앙오버행
+
 export type OutdoorLocation = "ilsan" | "munhak";
 
 export type HoldColor =
@@ -39,7 +45,7 @@ export interface Profile {
 export interface OutdoorRoute {
   id: string;
   outdoor_location: OutdoorLocation;
-  wall_type: WallType;
+  wall_type: OutdoorWallType;
   grade_value: GradeValue;
   grade_detail: GradeDetail;
   hold_color: HoldColor;
@@ -196,6 +202,15 @@ export const WALL_TYPE_LABELS: Record<WallType, string> = {
   overhang: "오버벽",
   extreme_overhang: "극오버",
 };
+
+export const OUTDOOR_WALL_TYPE_LABELS: Record<OutdoorWallType, string> = {
+  vertical: "직벽",
+  left_overhang: "좌측오버행",
+  right_overhang: "우측오버행",
+  center_overhang: "중앙오버행",
+};
+
+export const OUTDOOR_WALL_TYPES: OutdoorWallType[] = ["vertical", "left_overhang", "right_overhang", "center_overhang"];
 
 export const GRADE_VALUES: GradeValue[] = ["5.9", "10", "11", "12", "13"];
 export const GRADE_DETAILS: GradeDetail[] = ["a", "b", "c", "d"];

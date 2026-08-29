@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { redirect, notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { OUTDOOR_LOCATION_LABELS, WALL_TYPE_LABELS, HOLD_COLOR_LABELS, formatGrade } from "@/types/database";
-import type { GradeDetail, GradeValue, OutdoorLocation, HoldColor } from "@/types/database";
+import { OUTDOOR_LOCATION_LABELS, OUTDOOR_WALL_TYPE_LABELS, HOLD_COLOR_LABELS, formatGrade } from "@/types/database";
+import type { GradeDetail, GradeValue, OutdoorLocation, OutdoorWallType, HoldColor } from "@/types/database";
 import OutdoorExerciseLogEdit from "../OutdoorExerciseLogEdit";
 
 export default async function OutdoorExerciseDetailPage({
@@ -64,7 +64,7 @@ export default async function OutdoorExerciseDetailPage({
 
   const locationLabel = OUTDOOR_LOCATION_LABELS[row.route.outdoor_location] ?? row.route.outdoor_location;
   const wallLabel =
-    WALL_TYPE_LABELS[row.route.wall_type as keyof typeof WALL_TYPE_LABELS] ??
+    OUTDOOR_WALL_TYPE_LABELS[row.route.wall_type as OutdoorWallType] ??
     row.route.wall_type;
   const colorLabel = HOLD_COLOR_LABELS[row.route.hold_color] ?? row.route.hold_color;
   const grade = formatGrade(row.route.grade_value, row.route.grade_detail);
