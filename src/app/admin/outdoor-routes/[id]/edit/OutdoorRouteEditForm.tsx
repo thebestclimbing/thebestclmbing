@@ -8,15 +8,14 @@ import { SubmitButton } from "@/components/SubmitButton";
 import {
   OUTDOOR_LOCATION_LABELS,
   OUTDOOR_LOCATIONS,
-  WALL_TYPE_LABELS,
+  OUTDOOR_WALL_TYPE_LABELS,
+  OUTDOOR_WALL_TYPES,
   GRADE_VALUES,
   GRADE_DETAILS,
   HOLD_COLOR_LABELS,
   HOLD_COLORS,
 } from "@/types/database";
-import type { OutdoorLocation, WallType, HoldColor } from "@/types/database";
-
-const WALL_TYPES: WallType[] = ["vertical", "slight_overhang", "overhang", "extreme_overhang"];
+import type { OutdoorLocation, OutdoorWallType, HoldColor } from "@/types/database";
 
 type RouteInitial = {
   id: string;
@@ -32,7 +31,7 @@ type RouteInitial = {
 export default function OutdoorRouteEditForm({ route }: { route: RouteInitial }) {
   const router = useRouter();
   const [location, setLocation] = useState<OutdoorLocation>(route.outdoor_location as OutdoorLocation);
-  const [wallType, setWallType] = useState<WallType>(route.wall_type as WallType);
+  const [wallType, setWallType] = useState<OutdoorWallType>(route.wall_type as OutdoorWallType);
   const [gradeValue, setGradeValue] = useState<(typeof GRADE_VALUES)[number]>(
     route.grade_value as (typeof GRADE_VALUES)[number]
   );
@@ -90,9 +89,9 @@ export default function OutdoorRouteEditForm({ route }: { route: RouteInitial })
         </div>
         <div>
           <label className="mb-1 block text-sm text-[var(--chalk-muted)]">암벽구분</label>
-          <select value={wallType} onChange={(e) => setWallType(e.target.value as WallType)} className="input-base">
-            {WALL_TYPES.map((w) => (
-              <option key={w} value={w}>{WALL_TYPE_LABELS[w]}</option>
+          <select value={wallType} onChange={(e) => setWallType(e.target.value as OutdoorWallType)} className="input-base">
+            {OUTDOOR_WALL_TYPES.map((w) => (
+              <option key={w} value={w}>{OUTDOOR_WALL_TYPE_LABELS[w]}</option>
             ))}
           </select>
         </div>

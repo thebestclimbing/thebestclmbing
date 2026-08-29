@@ -3,11 +3,11 @@
 import { useState, useRef, useEffect } from "react";
 import {
   OUTDOOR_LOCATION_LABELS,
-  WALL_TYPE_LABELS,
+  OUTDOOR_WALL_TYPE_LABELS,
   HOLD_COLOR_LABELS,
   formatGrade,
 } from "@/types/database";
-import type { OutdoorLocation, WallType, HoldColor, GradeValue, GradeDetail } from "@/types/database";
+import type { OutdoorLocation, OutdoorWallType, HoldColor, GradeValue, GradeDetail } from "@/types/database";
 
 interface OutdoorRouteOption {
   id: string;
@@ -21,7 +21,7 @@ interface OutdoorRouteOption {
 
 function routeLabel(r: OutdoorRouteOption): string {
   const locationLabel = OUTDOOR_LOCATION_LABELS[r.outdoor_location as OutdoorLocation] ?? r.outdoor_location;
-  const wallLabel = WALL_TYPE_LABELS[r.wall_type as WallType] ?? r.wall_type;
+  const wallLabel = OUTDOOR_WALL_TYPE_LABELS[r.wall_type as OutdoorWallType] ?? r.wall_type;
   const grade = formatGrade(r.grade_value as GradeValue, r.grade_detail as GradeDetail);
   const colorLabel = HOLD_COLOR_LABELS[r.hold_color as HoldColor] ?? r.hold_color;
   return `${locationLabel} ${wallLabel} ${grade} ${colorLabel}`;
