@@ -140,6 +140,11 @@ const STATS_LINKS = [
   { href: "/statistics/route-completions", label: "루트별 완등" },
 ] as const;
 
+const RANK_LINKS = [
+  { href: "/statistics/ranking", label: "센터랭크" },
+  { href: "/statistics/outdoor-ranking", label: "외벽랭크" },
+] as const;
+
 /** 이름에서 아바타용 이니셜 추출 (최대 2자) */
 function getInitials(name: string | null | undefined): string | null {
   const trimmed = name?.trim();
@@ -180,6 +185,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [adminOpen, setAdminOpen] = useState(false);
   const [statsOpen, setStatsOpen] = useState(false);
+  const [rankOpen, setRankOpen] = useState(false);
   const [exerciseOpen, setExerciseOpen] = useState(false);
 
   const isAuthPage = pathname === "/login" || pathname === "/member/register";
@@ -311,12 +317,43 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       >
         이벤트
       </Link>
-      <Link
-        href="/statistics/ranking"
-        className={`text-sm transition hover:text-[var(--primary)] lg:text-base ${pathname === "/statistics/ranking" ? "font-semibold text-[var(--primary)]" : "text-[var(--chalk-muted)]"}`}
-      >
-        랭킹 순위
-      </Link>
+      <div className="relative">
+        <button
+          type="button"
+          onClick={() => setRankOpen((o) => !o)}
+          className={`text-sm transition hover:text-[var(--primary)] lg:text-base ${pathname === "/statistics/ranking" || pathname === "/statistics/outdoor-ranking" ? "font-semibold text-[var(--primary)]" : "text-[var(--chalk-muted)]"}`}
+        >
+          랭킹 순위 ▾
+        </button>
+        <AnimatePresence>
+          {rankOpen && (
+            <>
+              <div
+                className="fixed inset-0 z-40"
+                aria-hidden
+                onClick={() => setRankOpen(false)}
+              />
+              <motion.div
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                className="absolute left-0 top-full z-50 mt-1 min-w-[140px] rounded-xl border border-[var(--border)] bg-[var(--surface)] py-2 shadow-lg"
+              >
+                {RANK_LINKS.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setRankOpen(false)}
+                    className={`block px-4 py-2 text-sm ${pathname === item.href ? "font-semibold text-[var(--primary)]" : "text-[var(--chalk)]"} hover:bg-[var(--surface-muted)]`}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+      </div>
       <div className="relative">
         <button
           type="button"
@@ -530,9 +567,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <Link href="/events" onClick={() => setMenuOpen(false)} className="rounded-xl px-4 py-3 text-[var(--chalk)] hover:bg-[var(--surface-muted)]">
                   이벤트
                 </Link>
-                <Link href="/statistics/ranking" onClick={() => setMenuOpen(false)} className="rounded-xl px-4 py-3 text-[var(--chalk)] hover:bg-[var(--surface-muted)]">
-                  랭킹 순위
-                </Link>
+                <div className="my-2 border-t border-[var(--border)]" />
+                <span className="px-4 py-2 text-xs font-medium text-[var(--chalk-muted)]">랭킹 순위</span>
+                {RANK_LINKS.map((item) => (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="rounded-xl px-4 py-2.5 pl-6 text-sm text-[var(--chalk)] hover:bg-[var(--surface-muted)]"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
                 <div className="my-2 border-t border-[var(--border)]" />
                 <span className="px-4 py-2 text-xs font-medium text-[var(--chalk-muted)]">통계</span>
                 {STATS_LINKS.map((item) => (
