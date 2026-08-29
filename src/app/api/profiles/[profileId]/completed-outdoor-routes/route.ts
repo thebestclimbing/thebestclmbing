@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { OUTDOOR_LOCATION_LABELS, HOLD_COLOR_LABELS } from "@/types/database";
-import type { OutdoorLocation, HoldColor } from "@/types/database";
+import { OUTDOOR_LOCATION_LABELS, OUTDOOR_WALL_TYPE_LABELS, HOLD_COLOR_LABELS } from "@/types/database";
+import type { OutdoorLocation, OutdoorWallType, HoldColor } from "@/types/database";
 
 export type CompletedOutdoorRouteItem = {
   label: string;
@@ -35,7 +35,7 @@ export async function GET(
 
   const { data: logs } = await supabase
     .from("outdoor_exercise_logs")
-    .select("outdoor_route_id, logged_at, route:outdoor_routes(outdoor_location, hold_color, rank_point, grade_value, grade_detail)")
+    .select("outdoor_route_id, logged_at, route:outdoor_routes(outdoor_location, wall_type, hold_color, rank_point, grade_value, grade_detail)")
     .eq("profile_id", profileId)
     .eq("is_completed", true)
     .order("logged_at", { ascending: true });
@@ -51,15 +51,17 @@ export async function GET(
     if (!route) continue;
     const r = route as {
       outdoor_location?: OutdoorLocation;
+      wall_type?: OutdoorWallType;
       hold_color?: HoldColor;
       rank_point?: number | null;
       grade_value?: string | null;
       grade_detail?: string | null;
     };
     const locationLabel = r.outdoor_location ? OUTDOOR_LOCATION_LABELS[r.outdoor_location] : "-";
+    const wallLabel = r.wall_type ? OUTDOOR_WALL_TYPE_LABELS[r.wall_type] : "-";
     const colorLabel = r.hold_color ? HOLD_COLOR_LABELS[r.hold_color] : "-";
     routes.push({
-      label: `${locationLabel} ${colorLabel}`,
+      label: `${locationLabel} ${wallLabel} ${colorLabel}`,
       rank_point: r.rank_point ?? null,
       grade_value: r.grade_value ?? null,
       grade_detail: r.grade_detail ?? null,

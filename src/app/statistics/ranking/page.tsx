@@ -61,7 +61,7 @@ export default async function RankingPage({
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
       <h1 className="mb-2 text-2xl font-bold text-[var(--chalk)]">
-        랭킹 순위
+        센터 랭킹 순위
       </h1>
       <p className="mb-4 text-sm text-[var(--chalk-muted)]">
         완등한 루트의 랭크포인트 합계(루트당 1회) 순위 · 전체 {total}명
