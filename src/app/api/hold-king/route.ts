@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getMonthStartEndKST } from "@/lib/date";
+import { effectiveProgressCount } from "@/lib/exercise-holds";
 
 /**
  * GET /api/hold-king
- * 이달(한국 시간 기준) 진행한 홀드 수(progress_hold_count 합계) 상위 3명 반환
+ * 이달(한국 시간 기준) 진행한 홀드 수(왕복 포함 progress_hold_count 합계) 상위 3명 반환
  * 반환: { leaders: { rank: number; name: string; count: number }[] }
  */
 export async function GET() {
@@ -22,7 +23,7 @@ export async function GET() {
 
   const { data: rows } = await supabase
     .from("exercise_logs")
-    .select("profile_id, progress_hold_count")
+    .select("profile_id, progress_hold_count, round_trip_count")
     .gte("logged_at", monthStart)
     .lte("logged_at", monthEnd);
 
@@ -33,7 +34,10 @@ export async function GET() {
   const sumByProfile: Record<string, number> = {};
   for (const r of rows) {
     const id = r.profile_id as string;
-    const count = (r.progress_hold_count as number) || 0;
+    const count = effectiveProgressCount(
+      (r.progress_hold_count as number) || 0,
+      (r.round_trip_count as number) || 0
+    );
     sumByProfile[id] = (sumByProfile[id] ?? 0) + count;
   }
 

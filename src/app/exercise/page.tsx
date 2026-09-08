@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getMonthStartEndKST, getWeekStartEndKST } from "@/lib/date";
+import { effectiveProgressCount } from "@/lib/exercise-holds";
 import type { GradeDetail, GradeValue } from "@/types/database";
 import ExerciseLogSection from "./ExerciseLogSection";
 import ExerciseMonthStats from "./ExerciseMonthStats";
@@ -84,15 +85,19 @@ export default async function ExercisePage() {
   const { start: monthStart, end: monthEnd } = getMonthStartEndKST();
   const { data: monthLogsRaw } = await supabase
     .from("exercise_logs")
-    .select("progress_hold_count, logged_at")
+    .select("progress_hold_count, round_trip_count, logged_at")
     .eq("profile_id", user.id)
     .gte("logged_at", monthStart)
     .lte("logged_at", monthEnd);
-  const monthLogs = (monthLogsRaw ?? []) as { progress_hold_count: number; logged_at: string }[];
-  const totalHolds = monthLogs.reduce((s, l) => s + l.progress_hold_count, 0);
+  type HoldStatsLogRow = { progress_hold_count: number; round_trip_count: number; logged_at: string };
+  const monthLogs = ((monthLogsRaw ?? []) as HoldStatsLogRow[]).map((l) => ({
+    logged_at: l.logged_at,
+    effectiveHolds: effectiveProgressCount(l.progress_hold_count, l.round_trip_count),
+  }));
+  const totalHolds = monthLogs.reduce((s, l) => s + l.effectiveHolds, 0);
   const holdsByDay: Record<string, number> = {};
   for (const l of monthLogs) {
-    holdsByDay[l.logged_at] = (holdsByDay[l.logged_at] ?? 0) + l.progress_hold_count;
+    holdsByDay[l.logged_at] = (holdsByDay[l.logged_at] ?? 0) + l.effectiveHolds;
   }
   const maxDailyHolds = Object.values(holdsByDay).reduce((m, v) => Math.max(m, v), 0);
   const routeCount = monthLogs.length;
@@ -128,15 +133,18 @@ export default async function ExercisePage() {
 
   const { data: weekLogsRaw } = await supabase
     .from("exercise_logs")
-    .select("progress_hold_count, logged_at")
+    .select("progress_hold_count, round_trip_count, logged_at")
     .eq("profile_id", user.id)
     .gte("logged_at", earliestMonday)
     .lte("logged_at", latestSunday);
-  const allWeekLogs = (weekLogsRaw ?? []) as { progress_hold_count: number; logged_at: string }[];
+  const allWeekLogs = ((weekLogsRaw ?? []) as HoldStatsLogRow[]).map((l) => ({
+    logged_at: l.logged_at,
+    effectiveHolds: effectiveProgressCount(l.progress_hold_count, l.round_trip_count),
+  }));
 
   const holdsByDate: Record<string, number> = {};
   for (const l of allWeekLogs) {
-    holdsByDate[l.logged_at] = (holdsByDate[l.logged_at] ?? 0) + l.progress_hold_count;
+    holdsByDate[l.logged_at] = (holdsByDate[l.logged_at] ?? 0) + l.effectiveHolds;
   }
 
   const weekSummaries = mondayIsos.map((mondayIso, index) => {

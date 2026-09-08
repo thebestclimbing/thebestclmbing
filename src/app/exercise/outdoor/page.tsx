@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getMonthStartEndKST, getWeekStartEndKST } from "@/lib/date";
+import { effectiveProgressCount } from "@/lib/exercise-holds";
 import type { GradeDetail, GradeValue, OutdoorLocation, HoldColor } from "@/types/database";
 import OutdoorExerciseLogSection from "./OutdoorExerciseLogSection";
 import OutdoorExerciseMonthStats from "./OutdoorExerciseMonthStats";
@@ -67,15 +68,19 @@ export default async function OutdoorExercisePage() {
   const { start: monthStart, end: monthEnd } = getMonthStartEndKST();
   const { data: monthLogsRaw } = await supabase
     .from("outdoor_exercise_logs")
-    .select("progress_clip_count, logged_at")
+    .select("progress_clip_count, round_trip_count, logged_at")
     .eq("profile_id", user.id)
     .gte("logged_at", monthStart)
     .lte("logged_at", monthEnd);
-  const monthLogs = (monthLogsRaw ?? []) as { progress_clip_count: number; logged_at: string }[];
-  const totalClips = monthLogs.reduce((s, l) => s + l.progress_clip_count, 0);
+  type ClipStatsLogRow = { progress_clip_count: number; round_trip_count: number; logged_at: string };
+  const monthLogs = ((monthLogsRaw ?? []) as ClipStatsLogRow[]).map((l) => ({
+    logged_at: l.logged_at,
+    effectiveClips: effectiveProgressCount(l.progress_clip_count, l.round_trip_count),
+  }));
+  const totalClips = monthLogs.reduce((s, l) => s + l.effectiveClips, 0);
   const clipsByDay: Record<string, number> = {};
   for (const l of monthLogs) {
-    clipsByDay[l.logged_at] = (clipsByDay[l.logged_at] ?? 0) + l.progress_clip_count;
+    clipsByDay[l.logged_at] = (clipsByDay[l.logged_at] ?? 0) + l.effectiveClips;
   }
   const maxDailyClips = Object.values(clipsByDay).reduce((m, v) => Math.max(m, v), 0);
   const routeCount = monthLogs.length;
@@ -101,15 +106,18 @@ export default async function OutdoorExercisePage() {
 
   const { data: weekLogsRaw } = await supabase
     .from("outdoor_exercise_logs")
-    .select("progress_clip_count, logged_at")
+    .select("progress_clip_count, round_trip_count, logged_at")
     .eq("profile_id", user.id)
     .gte("logged_at", earliestMonday)
     .lte("logged_at", latestSunday);
-  const allWeekLogs = (weekLogsRaw ?? []) as { progress_clip_count: number; logged_at: string }[];
+  const allWeekLogs = ((weekLogsRaw ?? []) as ClipStatsLogRow[]).map((l) => ({
+    logged_at: l.logged_at,
+    effectiveClips: effectiveProgressCount(l.progress_clip_count, l.round_trip_count),
+  }));
 
   const clipsByDate: Record<string, number> = {};
   for (const l of allWeekLogs) {
-    clipsByDate[l.logged_at] = (clipsByDate[l.logged_at] ?? 0) + l.progress_clip_count;
+    clipsByDate[l.logged_at] = (clipsByDate[l.logged_at] ?? 0) + l.effectiveClips;
   }
 
   const weekSummaries = mondayIsos.map((mondayIso, index) => {

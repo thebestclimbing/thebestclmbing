@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { getMonthStartEndKST, getWeekStartEndKST } from "@/lib/date";
+import { effectiveProgressCount } from "@/lib/exercise-holds";
 import type { GradeDetail, GradeValue } from "@/types/database";
 
 function addDaysIso(baseIso: string, days: number): string {
@@ -65,7 +66,7 @@ export async function getMemberExerciseData(profileId: string): Promise<MemberEx
       .limit(500),
     supabase
       .from("exercise_logs")
-      .select("progress_hold_count, logged_at")
+      .select("progress_hold_count, round_trip_count, logged_at")
       .eq("profile_id", profileId)
       .gte("logged_at", earliestMonday)
       .lte("logged_at", statsRangeEnd),
@@ -91,11 +92,15 @@ export async function getMemberExerciseData(profileId: string): Promise<MemberEx
     } as MemberLogItem;
   });
 
-  const dateRangeLogs = (dateRangeLogsRes.data ?? []) as { progress_hold_count: number; logged_at: string }[];
+  type DateRangeLogRow = { progress_hold_count: number; round_trip_count: number; logged_at: string };
+  const dateRangeLogs = ((dateRangeLogsRes.data ?? []) as DateRangeLogRow[]).map((l) => ({
+    logged_at: l.logged_at,
+    effectiveHolds: effectiveProgressCount(l.progress_hold_count, l.round_trip_count),
+  }));
   const monthLogs = dateRangeLogs.filter((l) => l.logged_at >= monthStart && l.logged_at <= monthEnd);
-  const totalHolds = monthLogs.reduce((s, l) => s + l.progress_hold_count, 0);
+  const totalHolds = monthLogs.reduce((s, l) => s + l.effectiveHolds, 0);
   const holdsByDay: Record<string, number> = {};
-  for (const l of monthLogs) holdsByDay[l.logged_at] = (holdsByDay[l.logged_at] ?? 0) + l.progress_hold_count;
+  for (const l of monthLogs) holdsByDay[l.logged_at] = (holdsByDay[l.logged_at] ?? 0) + l.effectiveHolds;
   const maxDailyHolds = Object.values(holdsByDay).reduce((m, v) => Math.max(m, v), 0);
   const routeCount = monthLogs.length;
   const attendanceCount = attendanceRes.count ?? 0;
@@ -104,7 +109,7 @@ export async function getMemberExerciseData(profileId: string): Promise<MemberEx
   const DAY_LABELS = ["월", "화", "수", "목", "금", "토", "일"];
   const allWeekLogs = dateRangeLogs.filter((l) => l.logged_at >= earliestMonday && l.logged_at <= latestSunday);
   const holdsByDate: Record<string, number> = {};
-  for (const l of allWeekLogs) holdsByDate[l.logged_at] = (holdsByDate[l.logged_at] ?? 0) + l.progress_hold_count;
+  for (const l of allWeekLogs) holdsByDate[l.logged_at] = (holdsByDate[l.logged_at] ?? 0) + l.effectiveHolds;
   const weekSummaries: WeekSummary[] = mondayIsos.map((mondayIso, index) => {
     const dates: string[] = [];
     for (let i = 0; i < 7; i++) dates.push(addDaysIso(mondayIso, i));
