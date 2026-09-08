@@ -39,13 +39,13 @@ export default function ExerciseLogUpdateForm({
     String(initial.progress_hold_count)
   );
   const [attemptCountStr, setAttemptCountStr] = useState(String(Math.max(1, initial.attempt_count)));
-  const [isRoundTrip, setIsRoundTrip] = useState(initial.is_round_trip);
-  const [roundTripCount, setRoundTripCount] = useState(initial.round_trip_count);
+  const [roundTripCountStr, setRoundTripCountStr] = useState(String(initial.round_trip_count));
   const [loggedAt, setLoggedAt] = useState(initial.logged_at);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const progressHoldCount = Math.max(0, parseInt(progressHoldCountStr, 10) || 0);
+  const roundTripCount = Math.max(0, parseInt(roundTripCountStr, 10) || 0);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -58,7 +58,7 @@ export default function ExerciseLogUpdateForm({
         route_id: routeId,
         progress_hold_count: progressHoldCount,
         attempt_count: Math.max(1, parseInt(attemptCountStr, 10) || 1),
-        is_round_trip: isRoundTrip,
+        is_round_trip: roundTripCount > 0,
         round_trip_count: roundTripCount,
         logged_at: loggedAt,
       })
@@ -108,16 +108,20 @@ export default function ExerciseLogUpdateForm({
           <label className="mb-1 block text-sm text-[var(--chalk-muted)]">등반횟수</label>
           <input type="number" min={1} value={attemptCountStr} onChange={(e) => setAttemptCountStr(e.target.value)} className="input-base" />
         </div>
-        <div className="flex items-center gap-2 sm:col-span-2">
-          <input type="checkbox" id="isRoundTrip" checked={isRoundTrip} onChange={(e) => setIsRoundTrip(e.target.checked)} className="rounded border-[var(--border)]" />
-          <label htmlFor="isRoundTrip" className="text-sm text-[var(--chalk)]">왕복</label>
+        <div>
+          <label className="mb-1 block text-sm text-[var(--chalk-muted)]">왕복횟수</label>
+          <input
+            type="text"
+            inputMode="numeric"
+            value={roundTripCountStr}
+            onChange={(e) => {
+              const v = e.target.value.replace(/\D/g, "");
+              setRoundTripCountStr(v);
+            }}
+            placeholder="0"
+            className="input-base"
+          />
         </div>
-        {isRoundTrip && (
-          <div>
-            <label className="mb-1 block text-sm text-[var(--chalk-muted)]">왕복횟수</label>
-            <input type="number" min={0} value={roundTripCount} onChange={(e) => setRoundTripCount(Number(e.target.value))} className="input-base" />
-          </div>
-        )}
       </div>
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
       <div className="mt-4">
